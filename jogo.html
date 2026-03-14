@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Memory Architect v1.0</title>
+    <style>
+        /* CSS: A Estética Industrial */
+        body { background: #050505; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: 'Rajdhani', sans-serif; }
+        
+        .memory-game {
+            width: 640px; height: 640px;
+            display: flex; flex-wrap: wrap;
+            perspective: 1000px; /* Cria o efeito 3D */
+        }
+
+        .memory-card {
+            width: calc(25% - 10px); height: calc(33.333% - 10px);
+            margin: 5px; position: relative;
+            transform: scale(1); transform-style: preserve-3d;
+            transition: transform .5s; cursor: pointer;
+        }
+
+        .memory-card:active { transform: scale(0.97); transition: transform .2s; }
+
+        .memory-card.flip { transform: rotateY(180deg); }
+
+        .front-face, .back-face {
+            width: 100%; height: 100%;
+            padding: 20px; position: absolute;
+            border-radius: 5px; border: 2px solid #c6a664;
+            backface-visibility: hidden; /* Esconde a face de trás ao virar */
+            background: #111; box-sizing: border-box;
+        }
+
+        .front-face { transform: rotateY(180deg); display: flex; justify-content: center; align-items: center; color: #e0ac69; font-size: 40px; }
+        .back-face { background: #111 url('https://i.pinimg.com/originals/15/d0/ea/15d0ea79be5fe0a5e6d91b62a08ff3b9.gif') center/cover; opacity: 0.8; }
+
+        .front-face::after { content: ""; position: absolute; inset: 5px; border: 1px solid rgba(198, 166, 100, 0.2); }
+    </style>
+</head>
+<body>
+
+    <section class="memory-game">
+        <div class="memory-card" data-framework="gear">
+            <div class="front-face">⚙️</div>
+            <div class="back-face"></div>
+        </div>
+        <div class="memory-card" data-framework="gear">
+            <div class="front-face">⚙️</div>
+            <div class="back-face"></div>
+        </div>
+        <div class="memory-card" data-framework="bolt">
+            <div class="front-face">⚡</div>
+            <div class="back-face"></div>
+        </div>
+        <div class="memory-card" data-framework="bolt">
+            <div class="front-face">⚡</div>
+            <div class="back-face"></div>
+        </div>
+        <div class="memory-card" data-framework="ruby">
+            <div class="front-face">💎</div>
+            <div class="back-face"></div>
+        </div>
+        <div class="memory-card" data-framework="ruby">
+            <div class="front-face">💎</div>
+            <div class="back-face"></div>
+        </div>
+        <div class="memory-card" data-framework="wrench">
+            <div class="front-face">🔧</div>
+            <div class="back-face"></div>
+        </div>
+        <div class="memory-card" data-framework="wrench">
+            <div class="front-face">🔧</div>
+            <div class="back-face"></div>
+        </div>
+    </section>
+
+    <script>
+        /* JS: A Lógica do Inventor */
+        const cards = document.querySelectorAll('.memory-card');
+
+        let hasFlippedCard = false;
+        let lockBoard = false;
+        let firstCard, secondCard;
+
+        function flipCard() {
+            if (lockBoard) return;
+            if (this === firstCard) return;
+
+            this.classList.add('flip');
+
+            if (!hasFlippedCard) {
+                hasFlippedCard = true;
+                firstCard = this;
+                return;
+            }
+
+            secondCard = this;
+            checkForMatch();
+        }
+
+        function checkForMatch() {
+            let isMatch = firstCard.dataset.framework === secondCard.dataset.framework;
+            isMatch ? disableCards() : unflipCards();
+        }
+
+        function disableCards() {
+            firstCard.removeEventListener('click', flipCard);
+            secondCard.removeEventListener('click', flipCard);
+            resetBoard();
+        }
+
+        function unflipCards() {
+            lockBoard = true;
+            setTimeout(() => {
+                firstCard.classList.remove('flip');
+                secondCard.classList.remove('flip');
+                resetBoard();
+            }, 1000);
+        }
+
+        function resetBoard() {
+            [hasFlippedCard, lockBoard] = [false, false];
+            [firstCard, secondCard] = [null, null];
+        }
+
+        (function shuffle() {
+            cards.forEach(card => {
+                let randomPos = Math.floor(Math.random() * 12);
+                card.style.order = randomPos;
+            });
+        })();
+
+        cards.forEach(card => card.addEventListener('click', flipCard));
+    </script>
+</body>
+</html>
