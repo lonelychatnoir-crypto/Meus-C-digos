@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Protocolo de Extração: Memória</title>
+    <title>Memory Architect: Ticket System</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Rajdhani:wght@600;700&family=Source+Code+Pro:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root { --gold: #c6a664; --ruby: #8b0000; --silver: #a8a9ad; --bg: #050505; }
@@ -10,122 +10,131 @@
         body { 
             background: var(--bg) url('https://i.pinimg.com/originals/15/d0/ea/15d0ea79be5fe0a5e6d91b62a08ff3b9.gif') fixed center/cover;
             display: flex; justify-content: center; align-items: center; 
-            min-height: 100vh; margin: 0; font-family: 'Source Code Pro', monospace;
-            overflow: hidden;
+            min-height: 100vh; margin: 0; font-family: 'Source Code Pro', monospace; color: white;
         }
-        body::before { content: ""; position: absolute; inset: 0; background: rgba(5,5,5,0.92); z-index: 1; }
+        body::before { content: ""; position: absolute; inset: 0; background: rgba(5,5,5,0.93); z-index: 1; }
 
-        /* Borda Dourada Externa */
         .main-frame {
-            position: relative; z-index: 10; width: 650px; padding: 40px;
-            background: rgba(10, 10, 10, 0.9); border: 2px solid var(--gold);
+            position: relative; z-index: 10; width: 680px; padding: 40px;
+            background: rgba(10, 10, 10, 0.95); border: 2px solid var(--gold);
             box-shadow: 0 0 50px #000; text-align: center;
         }
 
-        /* Engrenagens v18.0 */
-        .gear {
-            position: absolute; width: 80px; height: 80px; z-index: 20; opacity: 0.8;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23c6a664'%3E%3Cpath d='M12 15.5A3.5 3.5 0 0 1 8.5 12 3.5 3.5 0 0 1 12 8.5a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5m7-4.13c.04-.45.04-.91 0-1.37l2.11-1.65a.5.5 0 0 0 .12-.64l-2-3.46a.5.5 0 0 0-.61-.22l-2.49 1a8.5 8.5 0 0 0-1.18-.69l-.38-2.65a.5.5 0 0 0-.5-.42h-4a.5.5 0 0 0-.5.42l-.38 2.65c-.43.17-.81.4-1.18.69l-2.49-1a.5.5 0 0 0-.61.22l-2 3.46a.5.5 0 0 0 .12.64l2.11 1.65c-.04.46-.04.92 0 1.38l-2.11 1.65a.5.5 0 0 0-.12.64l2 3.46a.5.5 0 0 0 .61.22l2.49-1c.37.29.75.52 1.18.69l.38 2.65a.5.5 0 0 0 .5.42h4a.5.5 0 0 0 .5-.42l.38-2.65c.43-.17.81-.4 1.18-.69l2.49 1a.5.5 0 0 0 .61-.22l2-3.46a.5.5 0 0 0-.12-.64l-2.11-1.65z'/%3E%3C/svg%3E");
-            animation: spin 15s linear infinite; filter: drop-shadow(0 0 10px var(--gold));
+        /* TELAS (Login, Jogo, Vitória) */
+        .screen { display: none; flex-direction: column; align-items: center; }
+        .active { display: flex; }
+
+        h1 { font-family: 'Cinzel'; color: #fff; letter-spacing: 5px; text-shadow: 2px 0 var(--ruby); }
+
+        /* ESTILO LOGIN */
+        input { 
+            background: #111; border: 1px solid var(--gold); color: #fff; 
+            padding: 15px; width: 300px; text-align: center; font-family: 'Rajdhani';
+            font-size: 18px; margin: 20px 0; outline: none;
         }
-        .g-tl { top: -30px; left: -30px; }
-        .g-br { bottom: -30px; right: -30px; animation-direction: reverse; }
-        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        button {
+            background: transparent; border: 1px solid var(--gold);
+            color: var(--gold); padding: 12px 30px; font-family: 'Rajdhani';
+            cursor: pointer; transition: 0.3s; text-transform: uppercase; letter-spacing: 2px;
+        }
+        button:hover { background: var(--gold); color: #000; box-shadow: 0 0 15px var(--gold); }
 
-        h1 { font-family: 'Cinzel'; color: #fff; letter-spacing: 5px; text-shadow: 2px 0 var(--ruby); margin-bottom: 30px; }
-
-        /* Grade do Jogo */
+        /* GRADE JOGO */
         .memory-game {
             display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
-            perspective: 1000px; margin-bottom: 20px;
+            perspective: 1000px; margin-top: 20px;
         }
-
-        .card {
-            height: 100px; position: relative; cursor: pointer;
-            transform-style: preserve-3d; transition: transform 0.5s;
-        }
+        .card { height: 100px; position: relative; cursor: pointer; transform-style: preserve-3d; transition: transform 0.5s; }
         .card.flip { transform: rotateY(180deg); }
-
         .front, .back {
             position: absolute; width: 100%; height: 100%;
             backface-visibility: hidden; border: 1px solid var(--gold);
             display: flex; justify-content: center; align-items: center; font-size: 30px;
         }
-        .front { background: #111; color: var(--gold); transform: rotateY(180deg); }
+        .front { background: #000; color: var(--gold); transform: rotateY(180deg); }
         .back { background: #1a1a1a; color: var(--ruby); }
-        .back::after { content: "⚙️"; opacity: 0.3; }
+        .back::after { content: "⚙️"; opacity: 0.2; }
 
-        /* Modal de Vitória/Sorteio */
-        #victory-screen {
-            display: none; position: absolute; inset: 0; 
-            background: rgba(5,5,5,0.95); z-index: 50;
-            flex-direction: column; justify-content: center; align-items: center;
-            border: 2px solid var(--ruby); animation: fadeIn 0.5s;
+        /* TICKET FINAL */
+        .ticket-display {
+            border: 2px dashed var(--gold); padding: 30px; margin-top: 30px;
+            background: linear-gradient(45deg, #0a0a0a, #1a0505);
+            width: 80%; position: relative;
         }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .ticket-id { color: var(--ruby); font-size: 12px; letter-spacing: 4px; }
+        .player-res { font-size: 24px; color: #fff; margin: 10px 0; font-family: 'Cinzel'; }
+        .reward-res { font-size: 18px; color: var(--gold); font-weight: 700; text-transform: uppercase; }
 
-        .reward-box { border: 1px solid var(--gold); padding: 20px; margin-top: 20px; min-width: 250px; }
-        .reward-name { font-family: 'Cinzel'; font-size: 24px; color: var(--gold); display: block; margin-bottom: 5px; }
-        .reward-rarity { font-family: 'Rajdhani'; letter-spacing: 3px; color: var(--ruby); }
-        
-        button {
-            margin-top: 30px; background: transparent; border: 1px solid var(--gold);
-            color: var(--gold); padding: 10px 20px; font-family: 'Rajdhani';
-            cursor: pointer; transition: 0.3s;
-        }
-        button:hover { background: var(--gold); color: #000; }
     </style>
 </head>
 <body>
 
     <div class="main-frame">
-        <div class="gear g-tl"></div>
-        <div class="gear g-br"></div>
         
-        <h1>Memory Architect</h1>
-        
-        <div class="memory-game" id="game-board">
-            </div>
-
-        <div id="victory-screen">
-            <h2 style="font-family: 'Cinzel'; color: #fff;">Protocolo Concluído!</h2>
-            <p style="color: var(--silver);">Sincronização completa. Extraindo recompensa...</p>
-            
-            <div class="reward-box" id="reward-display">
-                <span class="reward-rarity">CALIBRANDO...</span>
-                <span class="reward-name">SORTEANDO</span>
-            </div>
-            
-            <button onclick="location.reload()">Reiniciar Sistema</button>
+        <div class="screen active" id="login-screen">
+            <h1>Acesso ao Sistema</h1>
+            <p style="color:var(--silver)">Identifique-se para iniciar a extração.</p>
+            <input type="text" id="player-name" placeholder="NOME DO OPERADOR..." maxlength="20">
+            <button onclick="startGame()">Iniciar Sincronização</button>
         </div>
+
+        <div class="screen" id="game-screen">
+            <h1 style="font-size: 20px;">Memória Arcaica</h1>
+            <div class="memory-game" id="game-board"></div>
+        </div>
+
+        <div class="screen" id="victory-screen">
+            <h1>Extração Concluída</h1>
+            <div class="ticket-display">
+                <div class="ticket-id" id="ticket-number">TICKET #00</div>
+                <div class="player-res" id="display-name">OPERADOR</div>
+                <div style="border-top: 1px solid #333; margin: 15px 0;"></div>
+                <div class="reward-res" id="display-reward">PROCESSANDO...</div>
+            </div>
+            <p style="font-size: 10px; color: #444; margin-top: 20px;">REGISTRO ÚNICO - TIRE PRINT PARA RESGATAR</p>
+            <button onclick="location.reload()" style="margin-top:20px">Novo Protocolo</button>
+        </div>
+
     </div>
 
     <script>
+        let playerName = "";
+        let matchedPairs = 0;
         const icons = ['🔧', '⚙️', '💎', '⚡', '🔬', '🔋'];
         let cardsData = [...icons, ...icons];
         let flippedCards = [];
-        let matchedPairs = 0;
-        const totalPairs = icons.length;
 
-        // Recompensas Gacha
-        const pool = [
-            { n: "Engrenagem de Adamante", r: "Lendário", c: "gold" },
-            { n: "Núcleo de Rubi Energizado", r: "Raro", c: "ruby" },
-            { n: "Válvula de Latão Brunido", r: "Comum", c: "silver" }
+        // LISTA DOS 20 TICKETS
+        const tickets = [
+            "Lâmina de Aço Galvânico", "Núcleo de Vapor Comprimido", "Engrenagem de Rubi",
+            "Relógio de Pulso Arcano", "Válvula de Bronze Brunido", "Lente de Visão Térmica",
+            "Bateria de Éter", "Placa de Pressão Reforçada", "Manivela de Ouro Velho",
+            "Cilindro de Combustão Rubi", "Esquema Tático Militar", "Frasco de Óleo Refinado",
+            "Chave Mestra Oxidada", "Parafuso de Titânio", "Mola de Tensão Infinita",
+            "Chip de Processamento Vapor", "Sextante de Navegação", "Bússola Magnética Dourada",
+            "Fragmento de Cristal Estelar", "Manual do Grande Arquiteto"
         ];
+
+        function startGame() {
+            const nameInput = document.getElementById('player-name').value;
+            if (nameInput.trim() === "") {
+                alert("Por favor, identifique-se.");
+                return;
+            }
+            playerName = nameInput;
+            document.getElementById('login-screen').classList.remove('active');
+            document.getElementById('game-screen').classList.add('active');
+            initGame();
+        }
 
         function initGame() {
             const board = document.getElementById('game-board');
             cardsData.sort(() => Math.random() - 0.5);
-            
-            cardsData.forEach((icon, index) => {
+            cardsData.forEach(icon => {
                 const card = document.createElement('div');
                 card.classList.add('card');
                 card.dataset.icon = icon;
-                card.innerHTML = `
-                    <div class="front">${icon}</div>
-                    <div class="back"></div>
-                `;
+                card.innerHTML = `<div class="front">${icon}</div><div class="back"></div>`;
                 card.addEventListener('click', flipCard);
                 board.appendChild(card);
             });
@@ -135,10 +144,7 @@
             if (flippedCards.length < 2 && !this.classList.contains('flip')) {
                 this.classList.add('flip');
                 flippedCards.push(this);
-
-                if (flippedCards.length === 2) {
-                    setTimeout(checkMatch, 700);
-                }
+                if (flippedCards.length === 2) setTimeout(checkMatch, 700);
             }
         }
 
@@ -146,7 +152,7 @@
             const [c1, c2] = flippedCards;
             if (c1.dataset.icon === c2.dataset.icon) {
                 matchedPairs++;
-                if (matchedPairs === totalPairs) showVictory();
+                if (matchedPairs === icons.length) showVictory();
             } else {
                 c1.classList.remove('flip');
                 c2.classList.remove('flip');
@@ -155,25 +161,17 @@
         }
 
         function showVictory() {
-            const screen = document.getElementById('victory-screen');
-            const display = document.getElementById('reward-display');
-            screen.style.display = 'flex';
-
-            // Lógica de Sorteio
-            setTimeout(() => {
-                const rand = Math.random() * 100;
-                let prize = pool[2]; // Comum
-                if (rand < 10) prize = pool[0]; // Lendário
-                else if (rand < 40) prize = pool[1]; // Raro
-
-                display.innerHTML = `
-                    <span class="reward-rarity" style="color: var(--${prize.c})">${prize.r}</span>
-                    <span class="reward-name">${prize.n}</span>
-                `;
-            }, 1000);
+            document.getElementById('game-screen').classList.remove('active');
+            document.getElementById('victory-screen').classList.add('active');
+            
+            // Sorteio entre os 20 Tickets
+            const ticketIndex = Math.floor(Math.random() * tickets.length);
+            const ticketNum = (ticketIndex + 1).toString().padStart(2, '0');
+            
+            document.getElementById('display-name').innerText = playerName;
+            document.getElementById('ticket-number').innerText = `TICKET #${ticketNum}`;
+            document.getElementById('display-reward').innerText = tickets[ticketIndex];
         }
-
-        initGame();
     </script>
 </body>
 </html>
