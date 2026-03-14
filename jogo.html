@@ -2,64 +2,70 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Protocolo de Extração: 20 Tickets</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Playfair+Display:ital,wght@1,400&family=Source+Code+Pro:wght@400;700&display=swap" rel="stylesheet">
+    <title>Memory Architect v21.0</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Source+Code+Pro:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root { --gold: #c6a664; --ruby: #8b0000; --silver: #a8a9ad; --bg: #050505; }
         
         body { 
             background: var(--bg) url('https://i.pinimg.com/originals/15/d0/ea/15d0ea79be5fe0a5e6d91b62a08ff3b9.gif') fixed center/cover;
-            display: flex; justify-content: center; align-items: flex-start; 
-            min-height: 100vh; margin: 0; font-family: 'Source Code Pro', monospace; color: white; padding: 40px 0;
+            display: flex; justify-content: center; align-items: center; 
+            min-height: 100vh; margin: 0; font-family: 'Source Code Pro', monospace; color: white;
         }
-        body::before { content: ""; position: absolute; inset: 0; background: rgba(5,5,5,0.92); z-index: 1; pointer-events: none; }
+        /* Camada de escurecimento para legibilidade */
+        body::before { content: ""; position: absolute; inset: 0; background: rgba(5,5,5,0.9); z-index: 1; }
 
         .main-frame {
-            position: relative; z-index: 10; width: 680px; padding: 30px;
+            position: relative; z-index: 10; width: 650px; padding: 30px;
             background: rgba(10, 10, 10, 0.95); border: 2px solid var(--gold);
             box-shadow: 0 0 50px #000; text-align: center;
         }
 
-        /* Engrenagens SVG v20.0 */
+        /* Engrenagens Injetadas (SVG) */
         .gear {
-            position: absolute; width: 100px; height: 100px; z-index: 20; opacity: 0.9;
+            position: absolute; width: 100px; height: 100px; z-index: 20; opacity: 0.8;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23c6a664'%3E%3Cpath d='M12 15.5A3.5 3.5 0 0 1 8.5 12 3.5 3.5 0 0 1 12 8.5a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5m7-4.13c.04-.45.04-.91 0-1.37l2.11-1.65a.5.5 0 0 0 .12-.64l-2-3.46a.5.5 0 0 0-.61-.22l-2.49 1a8.5 8.5 0 0 0-1.18-.69l-.38-2.65a.5.5 0 0 0-.5-.42h-4a.5.5 0 0 0-.5.42l-.38 2.65c-.43.17-.81.4-1.18.69l-2.49-1a.5.5 0 0 0-.61.22l-2 3.46a.5.5 0 0 0 .12.64l2.11 1.65c-.04.46-.04.92 0 1.38l-2.11 1.65a.5.5 0 0 0-.12.64l2 3.46a.5.5 0 0 0 .61.22l2.49-1c.37.29.75.52 1.18.69l.38 2.65a.5.5 0 0 0 .5.42h4a.5.5 0 0 0 .5-.42l.38-2.65c.43-.17.81-.4 1.18-.69l2.49 1a.5.5 0 0 0 .61-.22l2-3.46a.5.5 0 0 0-.12-.64l-2.11-1.65z'/%3E%3C/svg%3E");
             animation: spin 15s linear infinite; filter: drop-shadow(0 0 10px var(--gold));
         }
-        .g-tl { top: -40px; left: -40px; }
-        .g-br { bottom: -40px; right: -40px; animation-direction: reverse; }
+        .g-tl { top: -30px; left: -30px; }
+        .g-br { bottom: -30px; right: -30px; animation-direction: reverse; }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
-        h1 { font-family: 'Cinzel'; font-size: 40px; color: #fff; letter-spacing: 5px; margin: 10px 0; text-shadow: 2px 0 var(--ruby); }
-        .quote { font-family: 'Playfair Display'; font-style: italic; color: var(--silver); font-size: 14px; margin-bottom: 30px; }
 
         /* Telas */
         .screen { display: none; flex-direction: column; align-items: center; }
         .active { display: flex; }
 
         /* Login */
-        input { background: #111; border: 1px solid var(--gold); color: #fff; padding: 15px; width: 320px; font-family: 'Source Code Pro'; font-size: 16px; text-align: center; margin: 20px 0; outline: none; }
-        button { background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 12px 30px; font-family: 'Cinzel'; cursor: pointer; transition: 0.3s; letter-spacing: 2px; }
-        button:hover { background: var(--gold); color: #000; box-shadow: 0 0 15px var(--gold); }
+        h1 { font-family: 'Cinzel'; font-size: 32px; color: #fff; letter-spacing: 5px; margin-bottom: 20px; }
+        input { 
+            background: #111; border: 1px solid var(--gold); color: #fff; padding: 15px; 
+            width: 300px; font-family: 'Source Code Pro'; font-size: 16px; 
+            text-align: center; margin: 20px 0; outline: none; 
+        }
+        .btn { background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 12px 30px; font-family: 'Cinzel'; cursor: pointer; transition: 0.3s; }
+        .btn:hover { background: var(--gold); color: #000; box-shadow: 0 0 15px var(--gold); }
 
-        /* Grid do Jogo (40 cartas) */
+        /* Grid (40 cartas = 5x8) */
         .memory-game {
             display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px;
-            perspective: 1000px; margin: 20px 0; width: 100%;
+            width: 100%; margin: 20px 0;
         }
-        .card { height: 75px; position: relative; cursor: pointer; transform-style: preserve-3d; transition: transform 0.5s; }
+        .card { height: 70px; position: relative; cursor: pointer; transform-style: preserve-3d; transition: transform 0.5s; }
         .card.flip { transform: rotateY(180deg); }
-        .front, .back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border: 1px solid var(--gold); display: flex; justify-content: center; align-items: center; font-size: 20px; border-radius: 3px; }
+        .front, .back { 
+            position: absolute; width: 100%; height: 100%; backface-visibility: hidden; 
+            border: 1px solid var(--gold); display: flex; justify-content: center; 
+            align-items: center; font-size: 18px; border-radius: 2px;
+        }
         .front { background: #000; color: var(--gold); transform: rotateY(180deg); }
         .back { background: #1a1a1a; color: var(--ruby); }
+        .back::after { content: "?"; opacity: 0.5; }
 
-        /* Painel de Resultado Abaixo */
-        #reward-log {
-            margin-top: 30px; padding: 20px; border-top: 1px solid #222;
-            min-height: 50px; font-family: 'Cinzel'; font-size: 18px; color: #fff;
+        /* Mensagem de Resultado */
+        #result-box {
+            margin-top: 25px; padding: 20px; border-top: 1px solid #333;
+            font-family: 'Cinzel'; font-size: 18px; color: var(--gold); min-height: 40px;
         }
-        .log-entry { color: var(--gold); animation: flash 1s; }
-        @keyframes flash { from { color: var(--ruby); } to { color: var(--gold); } }
     </style>
 </head>
 <body>
@@ -67,89 +73,73 @@
     <div class="main-frame">
         <div class="gear g-tl"></div>
         <div class="gear g-br"></div>
-        
-        <h1>Grand Design</h1>
-        <div class="quote">"A perfeição mecânica é a harmonia entre o caos e a ordem."</div>
 
         <div class="screen active" id="login-screen">
-            <p style="color: var(--silver)">INSIRA A IDENTIFICAÇÃO DO OPERADOR:</p>
-            <input type="text" id="player-name" placeholder="Nome Completo..." maxlength="30">
-            <button onclick="startGame()">Sincronizar Sistema</button>
+            <h1>Identificação</h1>
+            <input type="text" id="player-name" placeholder="NOME DO OPERADOR..." maxlength="25">
+            <button class="btn" onclick="iniciar()">Sincronizar</button>
         </div>
 
         <div class="screen" id="game-screen">
-            <div class="memory-game" id="game-board"></div>
-            
-            <div id="reward-log">
-                <span style="opacity: 0.3; font-size: 12px;">Sincronização em andamento...</span>
-            </div>
+            <h1 style="font-size: 20px;">Protocolo de Memória</h1>
+            <div class="memory-game" id="board"></div>
+            <div id="result-box">Aguardando pares...</div>
         </div>
-
     </div>
 
     <script>
-        let playerName = "";
-        let matchedPairs = 0;
-        let flippedCards = [];
+        let nome = "";
+        let paresEncontrados = 0;
+        let cartasViradas = [];
         
-        // 20 Ícones para 20 Pares
-        const icons = ['🔧','⚙️','💎','⚡','🔬','🔋','🛠️','📜','🔭','🗝️','🧪','🏮','📦','🧭','📡','🛰️','🧩','⚖️','🏹','🛡️'];
-        let cardsData = [...icons, ...icons];
+        // 20 ícones para 20 pares (total 40 cartas)
+        const icones = ['⚙️','🔧','💎','⚡','🔬','🔋','🛠️','📜','🔭','🗝️','🧪','🏮','📦','🧭','📡','🛰️','🧩','⚖️','🏹','🛡️'];
+        let deck = [...icones, ...icones];
 
-        // 20 Prêmios associados
-        const tickets = [
-            "Ticket de Legado sem ficha", "Núcleo de Vapor", "Lâmina de Rubi", "Bateria de Éter",
-            "Manuscrito Arcano", "Válvula de Ouro", "Esquema Tático", "Engrenagem Mestra",
-            "Lente Térmica", "Chave do Cofre", "Frasco de Óleo", "Lanterna Steampunk",
-            "Caixa de Suprimentos", "Bússola de Prata", "Antena de Longo Alcance", "Chip Arcaico",
-            "Fragmento de Metal", "Balança da Justiça", "Arco Mecânico", "Escudo Galvânico"
-        ];
-
-        function startGame() {
+        function iniciar() {
             const input = document.getElementById('player-name').value;
-            if (input.trim() === "") return alert("Identificação necessária!");
-            playerName = input;
-            document.getElementById('login-screen').classList.remove('active');
-            document.getElementById('game-screen').classList.add('active');
-            initGame();
+            if (input.trim() === "") return alert("Insira seu nome!");
+            nome = input;
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('game-screen').style.display = 'flex';
+            montarTabuleiro();
         }
 
-        function initGame() {
-            const board = document.getElementById('game-board');
-            cardsData.sort(() => Math.random() - 0.5);
-            cardsData.forEach((icon, index) => {
+        function montarTabuleiro() {
+            const board = document.getElementById('board');
+            deck.sort(() => Math.random() - 0.5);
+            deck.forEach(icon => {
                 const card = document.createElement('div');
                 card.classList.add('card');
                 card.dataset.icon = icon;
                 card.innerHTML = `<div class="front">${icon}</div><div class="back"></div>`;
-                card.addEventListener('click', flipCard);
+                card.onclick = virarCarta;
                 board.appendChild(card);
             });
         }
 
-        function flipCard() {
-            if (flippedCards.length < 2 && !this.classList.contains('flip')) {
+        function virarCarta() {
+            if (cartasViradas.length < 2 && !this.classList.contains('flip')) {
                 this.classList.add('flip');
-                flippedCards.push(this);
-                if (flippedCards.length === 2) setTimeout(checkMatch, 700);
+                cartasViradas.push(this);
+                if (cartasViradas.length === 2) setTimeout(checarPar, 700);
             }
         }
 
-        function checkMatch() {
-            const [c1, c2] = flippedCards;
+        function checarPar() {
+            const [c1, c2] = cartasViradas;
             if (c1.dataset.icon === c2.dataset.icon) {
-                matchedPairs++;
-                
-                // Lógica solicitada: Se conseguir os primeiros 2 pares
-                if (matchedPairs === 2) {
-                    const log = document.getElementById('reward-log');
-                    log.innerHTML = `<div class="log-entry">${playerName}: 1 Ticket de Legado sem ficha</div>`;
+                paresEncontrados++;
+                // LÓGICA DO TICKET: Quando atingir 2 pares
+                if (paresEncontrados === 2) {
+                    document.getElementById('result-box').innerHTML = 
+                    `<span style="color:white">${nome}:</span> 1 Ticket de Legado sem ficha`;
                 }
             } else {
                 c1.classList.remove('flip');
                 c2.classList.remove('flip');
             }
-            flippedCards = [];
+            cartasViradas = [];
         }
     </script>
 </body>
