@@ -2,136 +2,178 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Memory Architect v1.0</title>
+    <title>Protocolo de Extração: Memória</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Rajdhani:wght@600;700&family=Source+Code+Pro:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* CSS: A Estética Industrial */
-        body { background: #050505; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: 'Rajdhani', sans-serif; }
+        :root { --gold: #c6a664; --ruby: #8b0000; --silver: #a8a9ad; --bg: #050505; }
         
+        body { 
+            background: var(--bg) url('https://i.pinimg.com/originals/15/d0/ea/15d0ea79be5fe0a5e6d91b62a08ff3b9.gif') fixed center/cover;
+            display: flex; justify-content: center; align-items: center; 
+            min-height: 100vh; margin: 0; font-family: 'Source Code Pro', monospace;
+            overflow: hidden;
+        }
+        body::before { content: ""; position: absolute; inset: 0; background: rgba(5,5,5,0.92); z-index: 1; }
+
+        /* Borda Dourada Externa */
+        .main-frame {
+            position: relative; z-index: 10; width: 650px; padding: 40px;
+            background: rgba(10, 10, 10, 0.9); border: 2px solid var(--gold);
+            box-shadow: 0 0 50px #000; text-align: center;
+        }
+
+        /* Engrenagens v18.0 */
+        .gear {
+            position: absolute; width: 80px; height: 80px; z-index: 20; opacity: 0.8;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23c6a664'%3E%3Cpath d='M12 15.5A3.5 3.5 0 0 1 8.5 12 3.5 3.5 0 0 1 12 8.5a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5m7-4.13c.04-.45.04-.91 0-1.37l2.11-1.65a.5.5 0 0 0 .12-.64l-2-3.46a.5.5 0 0 0-.61-.22l-2.49 1a8.5 8.5 0 0 0-1.18-.69l-.38-2.65a.5.5 0 0 0-.5-.42h-4a.5.5 0 0 0-.5.42l-.38 2.65c-.43.17-.81.4-1.18.69l-2.49-1a.5.5 0 0 0-.61.22l-2 3.46a.5.5 0 0 0 .12.64l2.11 1.65c-.04.46-.04.92 0 1.38l-2.11 1.65a.5.5 0 0 0-.12.64l2 3.46a.5.5 0 0 0 .61.22l2.49-1c.37.29.75.52 1.18.69l.38 2.65a.5.5 0 0 0 .5.42h4a.5.5 0 0 0 .5-.42l.38-2.65c.43-.17.81-.4 1.18-.69l2.49 1a.5.5 0 0 0 .61-.22l2-3.46a.5.5 0 0 0-.12-.64l-2.11-1.65z'/%3E%3C/svg%3E");
+            animation: spin 15s linear infinite; filter: drop-shadow(0 0 10px var(--gold));
+        }
+        .g-tl { top: -30px; left: -30px; }
+        .g-br { bottom: -30px; right: -30px; animation-direction: reverse; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        h1 { font-family: 'Cinzel'; color: #fff; letter-spacing: 5px; text-shadow: 2px 0 var(--ruby); margin-bottom: 30px; }
+
+        /* Grade do Jogo */
         .memory-game {
-            width: 640px; height: 640px;
-            display: flex; flex-wrap: wrap;
-            perspective: 1000px; /* Cria o efeito 3D */
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+            perspective: 1000px; margin-bottom: 20px;
         }
 
-        .memory-card {
-            width: calc(25% - 10px); height: calc(33.333% - 10px);
-            margin: 5px; position: relative;
-            transform: scale(1); transform-style: preserve-3d;
-            transition: transform .5s; cursor: pointer;
+        .card {
+            height: 100px; position: relative; cursor: pointer;
+            transform-style: preserve-3d; transition: transform 0.5s;
         }
+        .card.flip { transform: rotateY(180deg); }
 
-        .memory-card:active { transform: scale(0.97); transition: transform .2s; }
-
-        .memory-card.flip { transform: rotateY(180deg); }
-
-        .front-face, .back-face {
-            width: 100%; height: 100%;
-            padding: 20px; position: absolute;
-            border-radius: 5px; border: 2px solid #c6a664;
-            backface-visibility: hidden; /* Esconde a face de trás ao virar */
-            background: #111; box-sizing: border-box;
+        .front, .back {
+            position: absolute; width: 100%; height: 100%;
+            backface-visibility: hidden; border: 1px solid var(--gold);
+            display: flex; justify-content: center; align-items: center; font-size: 30px;
         }
+        .front { background: #111; color: var(--gold); transform: rotateY(180deg); }
+        .back { background: #1a1a1a; color: var(--ruby); }
+        .back::after { content: "⚙️"; opacity: 0.3; }
 
-        .front-face { transform: rotateY(180deg); display: flex; justify-content: center; align-items: center; color: #e0ac69; font-size: 40px; }
-        .back-face { background: #111 url('https://i.pinimg.com/originals/15/d0/ea/15d0ea79be5fe0a5e6d91b62a08ff3b9.gif') center/cover; opacity: 0.8; }
+        /* Modal de Vitória/Sorteio */
+        #victory-screen {
+            display: none; position: absolute; inset: 0; 
+            background: rgba(5,5,5,0.95); z-index: 50;
+            flex-direction: column; justify-content: center; align-items: center;
+            border: 2px solid var(--ruby); animation: fadeIn 0.5s;
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        .front-face::after { content: ""; position: absolute; inset: 5px; border: 1px solid rgba(198, 166, 100, 0.2); }
+        .reward-box { border: 1px solid var(--gold); padding: 20px; margin-top: 20px; min-width: 250px; }
+        .reward-name { font-family: 'Cinzel'; font-size: 24px; color: var(--gold); display: block; margin-bottom: 5px; }
+        .reward-rarity { font-family: 'Rajdhani'; letter-spacing: 3px; color: var(--ruby); }
+        
+        button {
+            margin-top: 30px; background: transparent; border: 1px solid var(--gold);
+            color: var(--gold); padding: 10px 20px; font-family: 'Rajdhani';
+            cursor: pointer; transition: 0.3s;
+        }
+        button:hover { background: var(--gold); color: #000; }
     </style>
 </head>
 <body>
 
-    <section class="memory-game">
-        <div class="memory-card" data-framework="gear">
-            <div class="front-face">⚙️</div>
-            <div class="back-face"></div>
+    <div class="main-frame">
+        <div class="gear g-tl"></div>
+        <div class="gear g-br"></div>
+        
+        <h1>Memory Architect</h1>
+        
+        <div class="memory-game" id="game-board">
+            </div>
+
+        <div id="victory-screen">
+            <h2 style="font-family: 'Cinzel'; color: #fff;">Protocolo Concluído!</h2>
+            <p style="color: var(--silver);">Sincronização completa. Extraindo recompensa...</p>
+            
+            <div class="reward-box" id="reward-display">
+                <span class="reward-rarity">CALIBRANDO...</span>
+                <span class="reward-name">SORTEANDO</span>
+            </div>
+            
+            <button onclick="location.reload()">Reiniciar Sistema</button>
         </div>
-        <div class="memory-card" data-framework="gear">
-            <div class="front-face">⚙️</div>
-            <div class="back-face"></div>
-        </div>
-        <div class="memory-card" data-framework="bolt">
-            <div class="front-face">⚡</div>
-            <div class="back-face"></div>
-        </div>
-        <div class="memory-card" data-framework="bolt">
-            <div class="front-face">⚡</div>
-            <div class="back-face"></div>
-        </div>
-        <div class="memory-card" data-framework="ruby">
-            <div class="front-face">💎</div>
-            <div class="back-face"></div>
-        </div>
-        <div class="memory-card" data-framework="ruby">
-            <div class="front-face">💎</div>
-            <div class="back-face"></div>
-        </div>
-        <div class="memory-card" data-framework="wrench">
-            <div class="front-face">🔧</div>
-            <div class="back-face"></div>
-        </div>
-        <div class="memory-card" data-framework="wrench">
-            <div class="front-face">🔧</div>
-            <div class="back-face"></div>
-        </div>
-    </section>
+    </div>
 
     <script>
-        /* JS: A Lógica do Inventor */
-        const cards = document.querySelectorAll('.memory-card');
+        const icons = ['🔧', '⚙️', '💎', '⚡', '🔬', '🔋'];
+        let cardsData = [...icons, ...icons];
+        let flippedCards = [];
+        let matchedPairs = 0;
+        const totalPairs = icons.length;
 
-        let hasFlippedCard = false;
-        let lockBoard = false;
-        let firstCard, secondCard;
+        // Recompensas Gacha
+        const pool = [
+            { n: "Engrenagem de Adamante", r: "Lendário", c: "gold" },
+            { n: "Núcleo de Rubi Energizado", r: "Raro", c: "ruby" },
+            { n: "Válvula de Latão Brunido", r: "Comum", c: "silver" }
+        ];
+
+        function initGame() {
+            const board = document.getElementById('game-board');
+            cardsData.sort(() => Math.random() - 0.5);
+            
+            cardsData.forEach((icon, index) => {
+                const card = document.createElement('div');
+                card.classList.add('card');
+                card.dataset.icon = icon;
+                card.innerHTML = `
+                    <div class="front">${icon}</div>
+                    <div class="back"></div>
+                `;
+                card.addEventListener('click', flipCard);
+                board.appendChild(card);
+            });
+        }
 
         function flipCard() {
-            if (lockBoard) return;
-            if (this === firstCard) return;
+            if (flippedCards.length < 2 && !this.classList.contains('flip')) {
+                this.classList.add('flip');
+                flippedCards.push(this);
 
-            this.classList.add('flip');
-
-            if (!hasFlippedCard) {
-                hasFlippedCard = true;
-                firstCard = this;
-                return;
+                if (flippedCards.length === 2) {
+                    setTimeout(checkMatch, 700);
+                }
             }
-
-            secondCard = this;
-            checkForMatch();
         }
 
-        function checkForMatch() {
-            let isMatch = firstCard.dataset.framework === secondCard.dataset.framework;
-            isMatch ? disableCards() : unflipCards();
+        function checkMatch() {
+            const [c1, c2] = flippedCards;
+            if (c1.dataset.icon === c2.dataset.icon) {
+                matchedPairs++;
+                if (matchedPairs === totalPairs) showVictory();
+            } else {
+                c1.classList.remove('flip');
+                c2.classList.remove('flip');
+            }
+            flippedCards = [];
         }
 
-        function disableCards() {
-            firstCard.removeEventListener('click', flipCard);
-            secondCard.removeEventListener('click', flipCard);
-            resetBoard();
-        }
+        function showVictory() {
+            const screen = document.getElementById('victory-screen');
+            const display = document.getElementById('reward-display');
+            screen.style.display = 'flex';
 
-        function unflipCards() {
-            lockBoard = true;
+            // Lógica de Sorteio
             setTimeout(() => {
-                firstCard.classList.remove('flip');
-                secondCard.classList.remove('flip');
-                resetBoard();
+                const rand = Math.random() * 100;
+                let prize = pool[2]; // Comum
+                if (rand < 10) prize = pool[0]; // Lendário
+                else if (rand < 40) prize = pool[1]; // Raro
+
+                display.innerHTML = `
+                    <span class="reward-rarity" style="color: var(--${prize.c})">${prize.r}</span>
+                    <span class="reward-name">${prize.n}</span>
+                `;
             }, 1000);
         }
 
-        function resetBoard() {
-            [hasFlippedCard, lockBoard] = [false, false];
-            [firstCard, secondCard] = [null, null];
-        }
-
-        (function shuffle() {
-            cards.forEach(card => {
-                let randomPos = Math.floor(Math.random() * 12);
-                card.style.order = randomPos;
-            });
-        })();
-
-        cards.forEach(card => card.addEventListener('click', flipCard));
+        initGame();
     </script>
 </body>
 </html>
