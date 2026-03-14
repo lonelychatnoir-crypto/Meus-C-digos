@@ -2,53 +2,66 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>SISTEMA DE EXTRAÇÃO v27.0</title>
+    <title>Grand Design: Protocolo 3-Pares</title>
     <style>
-        body { background: #050505; color: #fff; font-family: sans-serif; display: flex; justify-content: center; padding: 20px; }
-        #main-frame { width: 650px; border: 2px solid #c6a664; padding: 20px; background: #0a0a0a; text-align: center; }
+        :root { --gold: #c6a664; --ruby: #8b0000; --silver: #a8a9ad; --bg: #050505; }
+        body { background: var(--bg); color: #fff; font-family: 'Courier New', Courier, monospace; display: flex; justify-content: center; padding: 20px; }
+        #main-frame { width: 660px; border: 2px solid var(--gold); padding: 30px; background: #0a0a0a; text-align: center; position: relative; box-shadow: 0 0 50px #000; }
         
         /* Telas */
-        #login-screen { display: block; }
-        #game-screen { display: none; }
+        .screen { display: none; flex-direction: column; align-items: center; }
+        .active { display: flex; }
 
-        input { padding: 10px; width: 250px; margin: 10px; background: #111; border: 1px solid #c6a664; color: #fff; }
-        button { padding: 10px 20px; background: #c6a664; color: #000; border: none; cursor: pointer; font-weight: bold; }
+        h1 { color: #fff; letter-spacing: 5px; text-transform: uppercase; text-shadow: 2px 0 var(--ruby); }
+        input { padding: 15px; width: 300px; margin: 20px; background: #111; border: 1px solid var(--gold); color: #fff; text-align: center; }
+        button { padding: 12px 30px; background: transparent; border: 1px solid var(--gold); color: var(--gold); cursor: pointer; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; }
+        button:hover { background: var(--gold); color: #000; }
 
         /* Jogo */
-        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; margin-top: 20px; }
-        .card { height: 60px; background: #1a1a1a; border: 1px solid #c6a664; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 20px; }
-        .card.flipped { background: #000; color: #c6a664; }
+        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 20px; width: 100%; }
+        .card { height: 80px; background: #1a1a1a; border: 1px solid var(--gold); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 24px; transition: 0.3s; position: relative; }
+        .card.flipped { background: #000; color: var(--gold); border-color: var(--silver); transform: rotateY(180deg); }
+        .card.matched { border-color: var(--ruby); opacity: 0.8; }
 
-        /* Log */
-        #log { margin-top: 20px; padding: 10px; border: 1px dashed #c6a664; text-align: left; max-height: 200px; overflow-y: auto; }
-        .entry { border-left: 3px solid #8b0000; padding-left: 10px; margin-bottom: 5px; font-size: 14px; }
+        /* Painel Final */
+        #final-report { margin-top: 30px; padding: 20px; border: 2px dashed var(--ruby); background: rgba(139, 0, 0, 0.1); display: none; }
+        .reward-item { color: var(--gold); font-size: 18px; margin: 10px 0; font-weight: bold; }
+        .counter { font-size: 14px; color: var(--silver); margin-top: 10px; }
     </style>
 </head>
 <body>
 
     <div id="main-frame">
-        <h1>GRAND DESIGN</h1>
+        <h1>Grand Design</h1>
 
-        <div id="login-screen">
-            <p>IDENTIFIQUE O OPERADOR:</p>
-            <input type="text" id="nome-input" placeholder="Seu nome aqui...">
-            <br>
-            <button type="button" onclick="ignicao()">SINCRONIZAR SISTEMA</button>
+        <div class="screen active" id="login-screen">
+            <p style="color: var(--silver)">INSIRA IDENTIFICAÇÃO DO INVENTOR:</p>
+            <input type="text" id="nome-operador" placeholder="Nome Completo...">
+            <button onclick="ativarSistema()">Sincronizar</button>
         </div>
 
-        <div id="game-screen">
+        <div class="screen" id="game-screen">
+            <div class="counter">Sincronização: <span id="pairs-count">0</span> / 3 Pares Encontrados</div>
             <div class="grid" id="tabuleiro"></div>
-            <div id="log">Aguardando formação de par...</div>
+            
+            <div id="final-report">
+                <h2 style="color: #fff;">EXTRAÇÃO CONCLUÍDA</h2>
+                <div id="player-display" style="border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 10px;"></div>
+                <div id="lista-premios"></div>
+                <p style="font-size: 10px; color: var(--silver); margin-top: 15px;">PROTOCOLO ENCERRADO - TIRE PRINT PARA RESGATE</p>
+                <button onclick="location.reload()" style="font-size: 10px; padding: 5px 10px;">Reiniciar Unidade</button>
+            </div>
         </div>
     </div>
 
     <script>
-        let player = "";
-        let acertos = 0;
+        let nome = "";
+        let paresAchados = 0;
+        const maxPares = 3;
         let selecionadas = [];
+        let premiosGanhos = [];
 
-        // 20 Pares
-        const premios = {
+        const bancoDeDados = {
             'A': 'Ticket de Legado sem ficha', 'B': 'Núcleo de Vapor', 'C': 'Lâmina de Rubi', 'D': 'Bateria de Éter',
             'E': 'Manuscrito Arcano', 'F': 'Válvula de Ouro', 'G': 'Esquema Tático', 'H': 'Engrenagem Mestra',
             'I': 'Lente Térmica', 'J': 'Chave do Cofre', 'K': 'Frasco de Óleo', 'L': 'Lanterna Steampunk',
@@ -56,54 +69,59 @@
             'Q': 'Fragmento de Metal', 'R': 'Balança de Bronze', 'S': 'Arco Mecânico', 'T': 'Escudo Galvânico'
         };
 
-        function ignicao() {
-            // ALERTA DE TESTE - Se isso não aparecer, o navegador está lendo o código velho!
-            console.log("Botão apertado!");
+        function ativarSistema() {
+            const input = document.getElementById('nome-operador').value.trim();
+            if (input === "") return alert("Identificação necessária!");
             
-            const nome = document.getElementById('nome-input').value;
-            if (nome.trim() === "") {
-                alert("Insira um nome!");
-                return;
-            }
-
-            player = nome;
-
-            // TROCA DE TELA BRUTA
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('game-screen').style.display = 'block';
-
-            iniciarJogo();
+            nome = input;
+            document.getElementById('login-screen').classList.remove('active');
+            document.getElementById('game-screen').classList.add('active');
+            gerarTabuleiro();
         }
 
-        function iniciarJogo() {
+        function gerarTabuleiro() {
             const board = document.getElementById('tabuleiro');
-            const icons = Object.keys(premios);
-            let deck = [...icons, ...icons];
-            deck.sort(() => Math.random() - 0.5);
+            const chaves = Object.keys(bancoDeDados);
+            let cartas = [...chaves, ...chaves];
+            cartas.sort(() => Math.random() - 0.5);
 
             board.innerHTML = '';
-            deck.forEach(simbolo => {
+            cartas.forEach(simbolo => {
                 const card = document.createElement('div');
                 card.className = 'card';
                 card.dataset.value = simbolo;
                 card.innerHTML = '?';
-                card.onclick = function() {
-                    if (selecionadas.length < 2 && !this.classList.contains('flipped')) {
-                        this.classList.add('flipped');
-                        this.innerHTML = this.dataset.value;
-                        selecionadas.push(this);
-                        if (selecionadas.length === 2) setTimeout(conferir, 500);
-                    }
-                };
+                card.onclick = function() { virar(this); };
                 board.appendChild(card);
             });
         }
 
-        function conferir() {
+        function virar(card) {
+            // Se já achou 3 pares ou a carta já está virada, não faz nada
+            if (paresAchados >= maxPares || selecionadas.length >= 2 || card.classList.contains('flipped')) return;
+
+            card.classList.add('flipped');
+            card.innerHTML = card.dataset.value;
+            selecionadas.push(card);
+
+            if (selecionadas.length === 2) {
+                setTimeout(verificarPar, 600);
+            }
+        }
+
+        function verificarPar() {
             const [c1, c2] = selecionadas;
             if (c1.dataset.value === c2.dataset.value) {
-                acertos++;
-                registrar(c1.dataset.value);
+                c1.classList.add('matched');
+                c2.classList.add('matched');
+                paresAchados++;
+                premiosGanhos.push(bancoDeDados[c1.dataset.value]);
+                
+                document.getElementById('pairs-count').innerText = paresAchados;
+
+                if (paresAchados === maxPares) {
+                    finalizarExtracao();
+                }
             } else {
                 c1.classList.remove('flipped');
                 c1.innerHTML = '?';
@@ -113,15 +131,25 @@
             selecionadas = [];
         }
 
-        function registrar(simbolo) {
-            const logBox = document.getElementById('log');
-            if (acertos === 1) logBox.innerHTML = ''; // Limpa o "Aguardando" no primeiro par
+        function finalizarExtracao() {
+            // Bloqueia qualquer clique extra ocultando o board ou desativando cards
+            document.getElementById('tabuleiro').style.opacity = "0.3";
+            document.getElementById('tabuleiro').style.pointerEvents = "none";
 
-            const premio = premios[simbolo];
-            const div = document.createElement('div');
-            div.className = 'entry';
-            div.innerHTML = `<b>${player}:</b> 1 ${premio}`;
-            logBox.prepend(div);
+            const report = document.getElementById('final-report');
+            const displayNome = document.getElementById('player-display');
+            const lista = document.getElementById('lista-premios');
+
+            report.style.display = 'block';
+            displayNome.innerHTML = `OPERADOR: <b style="color:var(--gold)">${nome}</b>`;
+            
+            lista.innerHTML = "";
+            premiosGanhos.forEach(p => {
+                const item = document.createElement('div');
+                item.className = 'reward-item';
+                item.innerHTML = `+ ${p}`;
+                lista.appendChild(item);
+            });
         }
     </script>
 </body>
