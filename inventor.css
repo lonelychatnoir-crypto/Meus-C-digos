@@ -1,14 +1,22 @@
-/* ENGENHARIA AVANÇADA - TÉCNICA CSS IA */
-@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Montserrat:wght@300;400;600&family=Playfair+Display:ital,wght@1,400&display=swap');
+/* =========================================================
+   ENGENHARIA AVANÇADA - TÉCNICA CSS IA // DOSSIER EDITION
+   Protocolo: The Great Architect v6.1 (Credit Restored)
+   ========================================================= */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Montserrat:wght@400;600&family=Playfair+Display:ital,wght@1,400&family=Share+Tech+Mono&display=swap');
+
+d { display: inline !important; font-style: normal !important; color: inherit !important; background: none !important; margin: 0 !important; padding: 0 !important; }
 
 #ia_inventor {
     --width: 550px;
-    --gold: #d4af37;
-    --silver: #c0c0c0;
-    --bg-dark: #0d0d0d;
+    --gold: #c6a664;
+    --gold-glow: #e0ac69;
+    --silver: #bdc3c7;
+    --text-silver: #cecece;
+    --bg-dark: #070707;
     margin: 40px auto;
     position: relative;
     display: block;
+    line-height: 1 !important;
 }
 
 #ia_inventor a[href="https://is.gd/cssia"] ~ .ia_container {
@@ -16,18 +24,20 @@
     background: var(--bg-dark) url('https://i.pinimg.com/originals/15/d0/ea/15d0ea79be5fe0a5e6d91b62a08ff3b9.gif') fixed center / cover !important;
     background-blend-mode: multiply !important;
     position: relative !important;
-    border: 1px solid var(--gold) !important;
+    border: 3px solid var(--gold) !important;
+    border-radius: 5px;
     padding: 10px !important;
-    box-shadow: 0 0 50px rgba(0,0,0,0.9) !important;
+    box-shadow: 0 0 50px rgba(0,0,0,0.9), inset 0 0 20px rgba(198, 166, 100, 0.2) !important;
     display: block !important;
 }
 
 .ia_inner_border {
-    border: 1px solid rgba(212, 175, 55, 0.2);
-    background: rgba(13, 13, 13, 0.96);
+    border: 1px solid rgba(189, 195, 199, 0.2);
+    background: rgba(13, 13, 13, 0.95);
+    box-shadow: 0 0 20px rgba(0,0,0,0.8);
     position: relative;
     z-index: 2;
-    padding: 60px 0;
+    padding: 60px 0 30px; /* Ajuste para o crédito */
 }
 
 .ia_gear_box {
@@ -35,27 +45,32 @@
     color: var(--gold);
     font-size: 60px;
     z-index: 10;
-    filter: drop-shadow(0 0 8px var(--gold));
+    filter: drop-shadow(0 0 10px var(--gold-glow));
     animation: ia_gear_spin 15s linear infinite !important;
+    pointer-events: none;
 }
 .ia_g1 { top: -30px; left: -30px; }
 .ia_g2 { bottom: -30px; right: -30px; animation-direction: reverse !important; }
 
-@keyframes ia_gear_spin { 
-    from { transform: rotate(0deg); } 
-    to { transform: rotate(360deg); } 
-}
+@keyframes ia_gear_spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-.ia_header { text-align: center; padding: 0 50px 40px; border-bottom: 1px solid rgba(212, 175, 55, 0.1); margin: 0 40px 30px; }
-.ia_title { font: 700 35px/100% 'Cinzel Decorative', cursive !important; color: var(--gold) !important; text-transform: uppercase; letter-spacing: 4px; margin: 0 0 15px !important; display: block; }
-.ia_subtitle { font: 400 13px/150% 'Playfair Display', serif !important; color: var(--silver) !important; font-style: italic; letter-spacing: 1px; display: block; }
+.ia_header { text-align: center; padding: 0 40px 40px; margin: 0 50px 30px; border-bottom: 2px solid rgba(198, 166, 100, 0.1); }
+.ia_meta { font: 400 9px/100% 'Share Tech Mono', monospace !important; color: var(--silver) !important; text-transform: uppercase; letter-spacing: 3px; display: block; margin-bottom: 10px; opacity: 0.6; }
+.ia_title { font: 700 38px/100% 'Cinzel Decorative', cursive !important; color: var(--gold) !important; text-transform: uppercase; letter-spacing: 5px; margin: 0 0 15px !important; text-shadow: 0 0 15px var(--gold-glow); display: block; }
+.ia_subtitle { font: 400 13px/150% 'Playfair Display', serif !important; color: var(--silver) !important; font-style: italic; letter-spacing: 1px; display: block; padding: 0 20px; text-shadow: 0 0 10px rgba(189, 195, 199, 0.3); }
 
-.ia_text_area { padding: 0 60px 40px; color: #cecece !important; font: 400 14px/190% 'Montserrat', sans-serif !important; text-align: justify !important; }
-.ia_text_area b { color: var(--gold) !important; font-weight: 600 !important; }
-.ia_text_area i { color: var(--silver) !important; font-style: italic !important; }
+.ia_text_area { padding: 0 70px 40px; color: var(--text-silver) !important; font: 400 14px/190% 'Montserrat', sans-serif !important; text-align: justify !important; position: relative; z-index: 5; }
+
+#ia_inventor b { color: var(--gold-glow) !important; font-weight: 600 !important; text-shadow: 0 0 8px rgba(224, 172, 105, 0.4); }
+#ia_inventor i { color: rgba(206, 206, 206, 0.7) !important; font-style: italic !important; font-weight: 300 !important; }
+#ia_inventor d { color: #e0ac69 !important; font-weight: 600 !important; font-family: 'Share Tech Mono', monospace !important; letter-spacing: 0.5px; opacity: 0.9; }
 
 .ia_medallion_box { padding: 20px 0 30px; display: flex; justify-content: center; position: relative; }
-.ia_frame { width: 120px; height: 120px; border-radius: 50%; border: 3px solid var(--gold); padding: 5px; background: #111; box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); margin: 0 auto; }
-.ia_img { width: 100%; height: 100%; border-radius: 50%; background-size: cover; background-position: center; border: 1px solid var(--silver); }
+.ia_frame { width: 130px; height: 130px; border-radius: 50%; border: 4px solid var(--gold); padding: 5px; background: #111; box-shadow: 0 0 25px rgba(198, 166, 100, 0.3); margin: 0 auto; }
+.ia_img { width: 100%; height: 100%; border-radius: 50%; background-size: cover; background-position: center; border: 1px solid var(--silver); filter: grayscale(1) brightness(0.8); transition: filter 0.5s ease; }
+.ia_frame:hover .ia_img { filter: grayscale(0) brightness(1); }
 
-#ia_inventor a[href="https://is.gd/cssia"] { display: block; width: var(--width); text-align: right; font: bold 8px 'Arial'; text-transform: uppercase; text-decoration: none; color: #444; margin-top: 5px; letter-spacing: 2px; }
+/* ASSINATURA REINSTALADA */
+.ia_sig_final { text-align: right; padding: 0 20px; }
+.ia_sig_final a { font: 700 8px 'Share Tech Mono', monospace !important; color: var(--gold) !important; text-decoration: none !important; text-transform: uppercase; letter-spacing: 3px; opacity: 0.25; transition: 0.3s; }
+.ia_sig_final a:hover { opacity: 0.8; text-shadow: 0 0 5px var(--gold-glow); }
