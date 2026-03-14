@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Memory Architect: Instant Reward</title>
+    <title>Grand Design: Sistema de Extração v25.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Source+Code+Pro:wght@400;700&family=Rajdhani:wght@600&display=swap" rel="stylesheet">
     <style>
         :root { --gold: #c6a664; --ruby: #8b0000; --silver: #a8a9ad; --bg: #050505; }
@@ -35,9 +35,6 @@
         .log-list { font-family: 'Rajdhani'; font-size: 17px; max-height: 400px; overflow-y: auto; }
         .log-item { margin-bottom: 12px; border-left: 3px solid var(--ruby); padding-left: 12px; animation: slideIn 0.4s ease-out; line-height: 1.4; }
         .log-item b { color: #fff; text-transform: uppercase; }
-        .auth-code { font-family: monospace; font-size: 11px; color: var(--silver); opacity: 0.5; margin-top: 4px; }
-        
-        @keyframes slideIn { from { opacity: 0; transform: translateX(-15px); } to { opacity: 1; transform: translateX(0); } }
     </style>
 </head>
 <body>
@@ -48,11 +45,100 @@
         <h1>Grand Design</h1>
 
         <div class="screen active" id="login-screen">
-            <p id="msg-status" style="color: var(--silver)">IDENTIFICAÇÃO NECESSÁRIA PARA EXTRAÇÃO:</p>
+            <p style="color: var(--silver)">INSIRA IDENTIFICAÇÃO DO OPERADOR:</p>
             <input type="text" id="player-name" placeholder="Ex: Raphael Sant'Angelo" maxlength="35">
-            <button class="btn" id="btn-start" onclick="conectar()">Sincronizar</button>
+            <button class="btn" onclick="iniciarFluxo()">Sincronizar</button>
         </div>
 
         <div class="screen" id="game-screen">
             <div class="memory-game" id="game-board"></div>
-            <div class="reward-
+            <div class="reward-registry">
+                <div class="registry-title">REGISTRO DE EXTRAÇÃO TÁTICA</div>
+                <div class="log-list" id="log-list">
+                    <div id="wait-msg" style="opacity: 0.4">Aguardando formação do primeiro par...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let nomeGlobal = "";
+        let acertos = 0;
+        let parAtual = [];
+
+        const recompensas = {
+            '⚙️': "Ticket de Legado sem ficha", '🔧': "Ticket de Reparo", '💎': "Ticket de Rubi", '⚡': "Ticket Elétrico",
+            '🔬': "Ticket Científico", '🔋': "Ticket de Bateria", '🛠️': "Ticket de Manutenção", '📜': "Ticket de Tática",
+            '🔭': "Ticket de Lente", '🗝️': "Ticket de Chave", '🧪': "Ticket Químico", '🏮': "Ticket de Lanterna",
+            '📦': "Ticket de Carga", '🧭': "Ticket de Bússola", '📡': "Ticket de Rádio", '🛰️': "Ticket Orbital",
+            '🧩': "Ticket de Enigma", '⚖️': "Ticket de Troca", '🏹': "Ticket de Disparo", '🛡️': "Ticket de Escudo"
+        };
+
+        const icons = Object.keys(recompensas);
+        let baralho = [...icons, ...icons];
+
+        function iniciarFluxo() {
+            const nomeInput = document.getElementById('player-name').value.trim();
+            if (nomeInput === "") {
+                alert("Por favor, identifique-se.");
+                return;
+            }
+
+            nomeGlobal = nomeInput;
+            
+            // Troca de tela imediata
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('game-screen').style.display = 'flex';
+            
+            gerarCards();
+        }
+
+        function gerarCards() {
+            const board = document.getElementById('game-board');
+            baralho.sort(() => Math.random() - 0.5);
+            
+            baralho.forEach(icon => {
+                const card = document.createElement('div');
+                card.classList.add('card');
+                card.dataset.icon = icon;
+                card.innerHTML = `<div class="front">${icon}</div><div class="back"></div>`;
+                card.onclick = virar;
+                board.appendChild(card);
+            });
+        }
+
+        function virar() {
+            if (parAtual.length < 2 && !this.classList.contains('flip')) {
+                this.classList.add('flip');
+                parAtual.push(this);
+                if (parAtual.length === 2) setTimeout(checar, 700);
+            }
+        }
+
+        function checar() {
+            const [c1, c2] = parAtual;
+            if (c1.dataset.icon === c2.dataset.icon) {
+                acertos++;
+                registrarTicket(c1.dataset.icon);
+            } else {
+                c1.classList.remove('flip');
+                c2.classList.remove('flip');
+            }
+            parAtual = [];
+        }
+
+        function registrarTicket(icon) {
+            const lista = document.getElementById('log-list');
+            const wait = document.getElementById('wait-msg');
+            if (wait) wait.remove();
+
+            const premio = recompensas[icon];
+            const item = document.createElement('div');
+            item.classList.add('log-item');
+            item.innerHTML = `<b>${nomeGlobal}:</b> 1 ${premio}`;
+            
+            lista.prepend(item);
+        }
+    </script>
+</body>
+</html>
