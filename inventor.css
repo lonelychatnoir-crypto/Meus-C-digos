@@ -1,0 +1,61 @@
+/* ENGENHARIA AVANÇADA - TÉCNICA CSS IA */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Montserrat:wght@300;400;600&family=Playfair+Display:ital,wght@1,400&display=swap');
+
+#ia_inventor {
+    --width: 550px;
+    --gold: #d4af37;
+    --silver: #c0c0c0;
+    --bg-dark: #0d0d0d;
+    margin: 40px auto;
+    position: relative;
+    display: block;
+}
+
+#ia_inventor a[href="https://is.gd/cssia"] ~ .ia_container {
+    width: var(--width) !important;
+    background: var(--bg-dark) url('https://i.pinimg.com/originals/15/d0/ea/15d0ea79be5fe0a5e6d91b62a08ff3b9.gif') fixed center / cover !important;
+    background-blend-mode: multiply !important;
+    position: relative !important;
+    border: 1px solid var(--gold) !important;
+    padding: 10px !important;
+    box-shadow: 0 0 50px rgba(0,0,0,0.9) !important;
+    display: block !important;
+}
+
+.ia_inner_border {
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    background: rgba(13, 13, 13, 0.96);
+    position: relative;
+    z-index: 2;
+    padding: 60px 0;
+}
+
+.ia_gear_box {
+    position: absolute;
+    color: var(--gold);
+    font-size: 60px;
+    z-index: 10;
+    filter: drop-shadow(0 0 8px var(--gold));
+    animation: ia_gear_spin 15s linear infinite !important;
+}
+.ia_g1 { top: -30px; left: -30px; }
+.ia_g2 { bottom: -30px; right: -30px; animation-direction: reverse !important; }
+
+@keyframes ia_gear_spin { 
+    from { transform: rotate(0deg); } 
+    to { transform: rotate(360deg); } 
+}
+
+.ia_header { text-align: center; padding: 0 50px 40px; border-bottom: 1px solid rgba(212, 175, 55, 0.1); margin: 0 40px 30px; }
+.ia_title { font: 700 35px/100% 'Cinzel Decorative', cursive !important; color: var(--gold) !important; text-transform: uppercase; letter-spacing: 4px; margin: 0 0 15px !important; display: block; }
+.ia_subtitle { font: 400 13px/150% 'Playfair Display', serif !important; color: var(--silver) !important; font-style: italic; letter-spacing: 1px; display: block; }
+
+.ia_text_area { padding: 0 60px 40px; color: #cecece !important; font: 400 14px/190% 'Montserrat', sans-serif !important; text-align: justify !important; }
+.ia_text_area b { color: var(--gold) !important; font-weight: 600 !important; }
+.ia_text_area i { color: var(--silver) !important; font-style: italic !important; }
+
+.ia_medallion_box { padding: 20px 0 30px; display: flex; justify-content: center; position: relative; }
+.ia_frame { width: 120px; height: 120px; border-radius: 50%; border: 3px solid var(--gold); padding: 5px; background: #111; box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); margin: 0 auto; }
+.ia_img { width: 100%; height: 100%; border-radius: 50%; background-size: cover; background-position: center; border: 1px solid var(--silver); }
+
+#ia_inventor a[href="https://is.gd/cssia"] { display: block; width: var(--width); text-align: right; font: bold 8px 'Arial'; text-transform: uppercase; text-decoration: none; color: #444; margin-top: 5px; letter-spacing: 2px; }
