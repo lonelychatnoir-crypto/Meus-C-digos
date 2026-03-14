@@ -1,134 +1,57 @@
 /* =========================================================
    ENGENHARIA AVANÇADA - TÉCNICA CSS IA // ARCANE-INVENTOR
-   Protocolo: The Great Architect v7.0 (Arcane Edition)
+   Protocolo: v13.0 (Darker Sea & Clean Layout)
    ========================================================= */
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
 @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Source+Code+Pro:wght@300;400;700&display=swap');
 
-/* FONTE TÍTULO */
 @font-face { font-family: 'Against'; src: url('https://dl.dropbox.com/scl/fi/q4s733g9rj1k26y5ji4x0/against-regular.ttf?rlkey=2swbkw42k5hqzffwfvrt9xfi4&st=3tlgn35v&dl=1'); }
 
-#ia-inventor {
-    --gold: #c6a664;
-    --gold-alt: #e0ac69;
-    --silver: #bdc3c7;
-    --bg: #070707;
-    width: 700px!important; 
-    margin: 30px auto!important; 
-    background: var(--bg)!important; 
-    border: 1px solid #222!important; 
-    position: relative!important; 
-    overflow: hidden!important; 
-    display: block!important; 
-    box-shadow: 0 0 50px #000!important; 
-    font-family: 'Source Code Pro', monospace!important; 
-    line-height: 1!important; 
+#ia-inventor { width: 700px!important; margin: 30px auto!important; background: #050505!important; border: 1px solid #222!important; position: relative!important; overflow: hidden!important; display: block!important; box-shadow: 0 0 50px #000!important; font-family: 'Source Code Pro', monospace!important; line-height: 1.8!important; }
+
+/* O MAR DE OURO (GIF FUNDO) */
+#ia-inventor::before { 
+    content: ""!important; position: absolute!important; top: 0; left: 0; width: 100%; height: 100%; 
+    background-image: url('https://i.pinimg.com/originals/15/d0/ea/15d0ea79be5fe0a5e6d91b62a08ff3b9.gif') !important;
+    background-size: cover !important; background-attachment: fixed !important; 
+    opacity: 0.6 !important; z-index: 1; pointer-events: none; 
 }
 
-/* MAR DE OURO (GIF FUNDO) */
-#ia-inventor::before {
-    content: ""!important; position: absolute!important; top: 0; left: 0; width: 100%; height: 100%;
-    background: var(--bg) url('https://i.pinimg.com/originals/15/d0/ea/15d0ea79be5fe0a5e6d91b62a08ff3b9.gif') fixed center / cover !important;
-    background-blend-mode: multiply!important;
-    opacity: 0.3; z-index: 1; pointer-events: none;
-}
+/* OVERLAY ESCURECIDO (NÍVEL 0.92) */
+.ia-overlay { position: absolute !important; inset: 0 !important; background: rgba(5, 5, 5, 0.92) !important; z-index: 2; pointer-events: none; }
 
-/* BORDAS TÁTICAS (OURO) */
-.ia-frame-edge {
-    content: ""!important; position: absolute!important; width: 60px; height: 60px;
-    border: 2px solid var(--gold)!important; z-index: 10; pointer-events: none;
-    transition: 0.5s ease-in-out;
-}
-.ia-top-l { top: -10px; left: -10px; border-right: 0!important; border-bottom: 0!important; }
-.ia-bot-r { bottom: -10px; right: -10px; border-left: 0!important; border-top: 0!important; }
-#ia-inventor:hover .ia-top-l { top: 10px; left: 10px; }
-#ia-inventor:hover .ia-bot-r { bottom: 10px; right: 10px; }
+/* SCANNER DOURADO */
+.ia-scanner { position: absolute!important; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(transparent 0%, rgba(198, 166, 100, 0.12) 50%, transparent 100%)!important; animation: iaScan 5s linear infinite!important; z-index: 5; pointer-events: none; }
 
-/* SCANNER DE OURO */
-.ia-scanner {
-    position: absolute!important; top: 0; left: 0; width: 100%; height: 100%;
-    background: linear-gradient(transparent 0%, rgba(198, 166, 100, 0.08) 50%, transparent 100%)!important;
-    animation: iaScan 5s linear infinite!important; z-index: 5; pointer-events: none;
-}
+/* ENGRENAGENS GIGANTES DOURADAS (85PX) */
+.ia-gear-heavy { position: absolute!important; color: #c6a664; font-size: 85px; z-index: 15; filter: drop-shadow(0 0 15px #e0ac69); animation: iaSpin 12s linear infinite!important; opacity: 0.9; pointer-events: none; }
+.gh-tl { top: -35px; left: -35px; }
+.gh-tr { top: -35px; right: -35px; animation-direction: reverse!important; }
+.gh-bl { bottom: -35px; left: -35px; animation-direction: reverse!important; }
+.gh-br { bottom: -35px; right: -35px; }
 
-/* HEADER COM GLITCH */
-.ia-header { 
-    height: 350px!important; background-size: cover!important; background-position: center!important;
-    position: relative!important; border-bottom: 2px solid #222!important;
-    display: flex!important; align-items: center; justify-content: center; z-index: 2;
-}
-.ia-header::before { 
-    content: ""!important; position: absolute!important; top: 0; left: 0; width: 100%; height: 100%;
-    background: linear-gradient(to bottom, transparent, var(--bg))!important; z-index: 1;
-}
+/* CABEÇALHO LIMPO */
+.ia-header { padding: 80px 40px!important; position: relative!important; border-bottom: 1px solid #222!important; display: flex!important; align-items: center; justify-content: center; z-index: 5; background: transparent !important; }
+.ia-title-box { text-align: center!important; z-index: 6; }
+.ia-title-box h1 { font: 700 65pt 'Against'!important; color: #fff!important; text-transform: uppercase!important; margin: 0!important; text-shadow: 3px 0 #e0ac69, -2px 0 #bdc3c7!important; animation: iaGlitch 3s infinite!important; }
+.ia-title-box span { font: 400 12pt 'Rajdhani'!important; color: #c6a664!important; letter-spacing: 2px!important; text-transform: none!important; display: block; margin-top: 15px; font-style: italic; opacity: 0.8; }
 
-/* ENGRENAGENS ROTATIVAS NO HEADER */
-.ia-header-gear {
-    position: absolute; color: var(--gold); font-size: 80px; opacity: 0.1;
-    animation: iaSpin 20s linear infinite; z-index: 0;
-}
-
-.ia-title-box { position: relative!important; z-index: 2!important; text-align: center!important; }
-.ia-title-box h1 { 
-    font: 700 60pt 'Against'!important; color: #fff!important; text-transform: uppercase!important; margin: 0!important;
-    text-shadow: 2px 0 var(--gold-alt), -2px 0 var(--silver)!important;
-    animation: iaGlitch 4s infinite!important;
-}
-.ia-title-box span { 
-    font: 700 10pt 'Rajdhani'!important; color: var(--gold)!important; 
-    letter-spacing: 7px!important; text-transform: uppercase!important; opacity: 0.8;
-}
-
-/* GRADE DE DADOS DO INVENTOR */
-.ia-content { padding: 60px!important; position: relative!important; z-index: 2!important; }
-
-.ia-data-grid { display: grid!important; grid-template-columns: 1fr 1fr 1fr!important; gap: 15px!important; margin-bottom: 40px!important; }
-.ia-data-item { 
-    background: rgba(255,255,255,0.02)!important; border: 1px solid rgba(255,255,255,0.05)!important;
-    padding: 15px!important; display: flex; flex-direction: column; position: relative; transition: 0.3s;
-}
-.ia-data-item:hover { border-color: var(--gold)!important; background: rgba(198, 166, 100, 0.03)!important; }
-.ia-data-item i { position: absolute; top: 10px; right: 10px; color: #333; font-size: 10pt; animation: iaSpin 10s linear infinite; }
-.ia-data-item:hover i { color: var(--gold)!important; text-shadow: 0 0 5px var(--gold); }
-.ia-data-item b { font: 700 8pt 'Rajdhani'!important; text-transform: uppercase!important; color: #666!important; letter-spacing: 2px!important; }
-.ia-data-item span { font: 400 11pt 'Source Code Pro'!important; color: var(--gold)!important; font-weight: 700; text-shadow: 0 0 5px var(--gold); }
-
-/* ÁREA NARRATIVA */
-.ia-bio { 
-    color: #cecece!important; font: 400 10.5pt 'Source Code Pro', monospace!important;
-    line-height: 1.9!important; text-align: justify!important; 
-    border-top: 1px solid rgba(255,255,255,0.05)!important; padding-top: 30px!important;
-}
+/* CONTEÚDO SEM QUADRADOS */
+.ia-content { padding: 40px 80px 60px!important; position: relative!important; z-index: 10!important; background: transparent !important; }
+.ia-bio { color: #cecece!important; font: 400 11pt 'Source Code Pro', monospace!important; text-align: justify!important; background: transparent !important; }
 
 /* TAGS NARRATIVAS */
-#ia-inventor b { color: var(--gold-alt)!important; font-weight: 700!important; text-shadow: 0 0 5px rgba(224, 172, 105, 0.2); }
-#ia-inventor i { color: var(--silver)!important; font-style: italic!important; }
-#ia-inventor d { color: var(--gold)!important; font-weight: 600!important; font-family: 'Rajdhani'!important; letter-spacing: 1px; }
+#ia-inventor b { color: #fff!important; font-weight: 700!important; }
+#ia-inventor i { color: #bdc3c7!important; font-style: italic!important; }
+#ia-inventor d { color: #e0ac69!important; font-weight: 600!important; font-family: 'Rajdhani'!important; letter-spacing: 1.5px; }
 
-/* MEDALHÃO PORTRAIT */
-.ia-portrait-box { margin-top: 40px; display: flex; justify-content: center; }
-.ia-medallion { 
-    width: 120px; height: 120px; border-radius: 50%; border: 2px solid var(--gold);
-    padding: 5px; background: #111; box-shadow: 0 0 20px rgba(198, 166, 100, 0.2);
-}
-.ia-medallion div { width: 100%; height: 100%; border-radius: 50%; background-size: cover; background-position: center; border: 1px solid var(--silver); }
+.ia-portrait { display: flex; justify-content: center; margin-top: 50px; background: transparent !important; }
+.ia-medallion { width: 130px; height: 130px; border-radius: 50%; border: 3px solid #c6a664; padding: 5px; background: #050505; box-shadow: 0 0 25px rgba(198, 166, 100, 0.4); }
+.ia-medallion div { width: 100%; height: 100%; border-radius: 50%; background-size: cover; background-position: center; border: 1px solid #bdc3c7; }
 
-/* RODAPÉ E ASSINATURA */
-.ia-footer { 
-    text-align: center!important; padding: 30px 60px 10px!important; 
-    color: #444!important; font: 700 8pt 'Rajdhani'!important; text-transform: uppercase!important; letter-spacing: 3px;
-}
-.ia-footer i { color: var(--gold)!important; margin: 0 10px!important; animation: iaFlicker 2s infinite; }
+.ia-sig { font-size: 8pt!important; text-align: right!important; opacity: 0.3!important; text-transform: uppercase!important; letter-spacing: 3px!important; padding: 20px 60px 40px; position: relative; z-index: 20; }
+.ia-sig a { color: #c6a664!important; text-decoration: none!important; font-weight: 700; }
 
-.ia-sig { font-size: 7pt!important; text-align: right!important; opacity: 0.3!important; text-transform: uppercase!important; letter-spacing: 2px!important; padding: 0 60px 30px; }
-.ia-sig a { color: var(--gold)!important; text-decoration: none!important; font-weight: 700; }
-
-/* ANIMAÇÕES */
 @keyframes iaScan { 0% { top: -100%; } 100% { top: 100%; } }
 @keyframes iaSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-@keyframes iaFlicker { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
-@keyframes iaGlitch {
-    0%, 100% { text-shadow: 2px 0 var(--gold-alt), -2px 0 var(--silver); }
-    2% { text-shadow: 5px 0 var(--gold-alt), -5px 0 var(--silver); transform: skewX(5deg); }
-    4% { text-shadow: -5px 0 var(--gold-alt), 5px 0 var(--silver); transform: skewX(-5deg); }
-}
+@keyframes iaGlitch { 0%, 100% { text-shadow: 3px 0 #e0ac69, -2px 0 #bdc3c7; } 2% { text-shadow: 7px 0 #e0ac69, -4px 0 #bdc3c7; transform: skewX(3deg); } }
