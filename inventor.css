@@ -1,76 +1,134 @@
 /* =========================================================
-   ENGENHARIA AVANÇADA - TÉCNICA CSS IA // DOSSIER EDITION
-   Protocolo: The Great Architect v6.1 (Credit Restored)
+   ENGENHARIA AVANÇADA - TÉCNICA CSS IA // ARCANE-INVENTOR
+   Protocolo: The Great Architect v7.0 (Arcane Edition)
    ========================================================= */
-@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Montserrat:wght@400;600&family=Playfair+Display:ital,wght@1,400&family=Share+Tech+Mono&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Source+Code+Pro:wght@300;400;700&display=swap');
 
-d { display: inline !important; font-style: normal !important; color: inherit !important; background: none !important; margin: 0 !important; padding: 0 !important; }
+/* FONTE TÍTULO */
+@font-face { font-family: 'Against'; src: url('https://dl.dropbox.com/scl/fi/q4s733g9rj1k26y5ji4x0/against-regular.ttf?rlkey=2swbkw42k5hqzffwfvrt9xfi4&st=3tlgn35v&dl=1'); }
 
-#ia_inventor {
-    --width: 550px;
+#ia-inventor {
     --gold: #c6a664;
-    --gold-glow: #e0ac69;
+    --gold-alt: #e0ac69;
     --silver: #bdc3c7;
-    --text-silver: #cecece;
-    --bg-dark: #070707;
-    margin: 40px auto;
-    position: relative;
-    display: block;
-    line-height: 1 !important;
+    --bg: #070707;
+    width: 700px!important; 
+    margin: 30px auto!important; 
+    background: var(--bg)!important; 
+    border: 1px solid #222!important; 
+    position: relative!important; 
+    overflow: hidden!important; 
+    display: block!important; 
+    box-shadow: 0 0 50px #000!important; 
+    font-family: 'Source Code Pro', monospace!important; 
+    line-height: 1!important; 
 }
 
-#ia_inventor a[href="https://is.gd/cssia"] ~ .ia_container {
-    width: var(--width) !important;
-    background: var(--bg-dark) url('https://i.pinimg.com/originals/15/d0/ea/15d0ea79be5fe0a5e6d91b62a08ff3b9.gif') fixed center / cover !important;
-    background-blend-mode: multiply !important;
-    position: relative !important;
-    border: 3px solid var(--gold) !important;
-    border-radius: 5px;
-    padding: 10px !important;
-    box-shadow: 0 0 50px rgba(0,0,0,0.9), inset 0 0 20px rgba(198, 166, 100, 0.2) !important;
-    display: block !important;
+/* MAR DE OURO (GIF FUNDO) */
+#ia-inventor::before {
+    content: ""!important; position: absolute!important; top: 0; left: 0; width: 100%; height: 100%;
+    background: var(--bg) url('https://i.pinimg.com/originals/15/d0/ea/15d0ea79be5fe0a5e6d91b62a08ff3b9.gif') fixed center / cover !important;
+    background-blend-mode: multiply!important;
+    opacity: 0.3; z-index: 1; pointer-events: none;
 }
 
-.ia_inner_border {
-    border: 1px solid rgba(189, 195, 199, 0.2);
-    background: rgba(13, 13, 13, 0.95);
-    box-shadow: 0 0 20px rgba(0,0,0,0.8);
-    position: relative;
-    z-index: 2;
-    padding: 60px 0 30px; /* Ajuste para o crédito */
+/* BORDAS TÁTICAS (OURO) */
+.ia-frame-edge {
+    content: ""!important; position: absolute!important; width: 60px; height: 60px;
+    border: 2px solid var(--gold)!important; z-index: 10; pointer-events: none;
+    transition: 0.5s ease-in-out;
+}
+.ia-top-l { top: -10px; left: -10px; border-right: 0!important; border-bottom: 0!important; }
+.ia-bot-r { bottom: -10px; right: -10px; border-left: 0!important; border-top: 0!important; }
+#ia-inventor:hover .ia-top-l { top: 10px; left: 10px; }
+#ia-inventor:hover .ia-bot-r { bottom: 10px; right: 10px; }
+
+/* SCANNER DE OURO */
+.ia-scanner {
+    position: absolute!important; top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(transparent 0%, rgba(198, 166, 100, 0.08) 50%, transparent 100%)!important;
+    animation: iaScan 5s linear infinite!important; z-index: 5; pointer-events: none;
 }
 
-.ia_gear_box {
-    position: absolute;
-    color: var(--gold);
-    font-size: 60px;
-    z-index: 10;
-    filter: drop-shadow(0 0 10px var(--gold-glow));
-    animation: ia_gear_spin 15s linear infinite !important;
-    pointer-events: none;
+/* HEADER COM GLITCH */
+.ia-header { 
+    height: 350px!important; background-size: cover!important; background-position: center!important;
+    position: relative!important; border-bottom: 2px solid #222!important;
+    display: flex!important; align-items: center; justify-content: center; z-index: 2;
 }
-.ia_g1 { top: -30px; left: -30px; }
-.ia_g2 { bottom: -30px; right: -30px; animation-direction: reverse !important; }
+.ia-header::before { 
+    content: ""!important; position: absolute!important; top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(to bottom, transparent, var(--bg))!important; z-index: 1;
+}
 
-@keyframes ia_gear_spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+/* ENGRENAGENS ROTATIVAS NO HEADER */
+.ia-header-gear {
+    position: absolute; color: var(--gold); font-size: 80px; opacity: 0.1;
+    animation: iaSpin 20s linear infinite; z-index: 0;
+}
 
-.ia_header { text-align: center; padding: 0 40px 40px; margin: 0 50px 30px; border-bottom: 2px solid rgba(198, 166, 100, 0.1); }
-.ia_meta { font: 400 9px/100% 'Share Tech Mono', monospace !important; color: var(--silver) !important; text-transform: uppercase; letter-spacing: 3px; display: block; margin-bottom: 10px; opacity: 0.6; }
-.ia_title { font: 700 38px/100% 'Cinzel Decorative', cursive !important; color: var(--gold) !important; text-transform: uppercase; letter-spacing: 5px; margin: 0 0 15px !important; text-shadow: 0 0 15px var(--gold-glow); display: block; }
-.ia_subtitle { font: 400 13px/150% 'Playfair Display', serif !important; color: var(--silver) !important; font-style: italic; letter-spacing: 1px; display: block; padding: 0 20px; text-shadow: 0 0 10px rgba(189, 195, 199, 0.3); }
+.ia-title-box { position: relative!important; z-index: 2!important; text-align: center!important; }
+.ia-title-box h1 { 
+    font: 700 60pt 'Against'!important; color: #fff!important; text-transform: uppercase!important; margin: 0!important;
+    text-shadow: 2px 0 var(--gold-alt), -2px 0 var(--silver)!important;
+    animation: iaGlitch 4s infinite!important;
+}
+.ia-title-box span { 
+    font: 700 10pt 'Rajdhani'!important; color: var(--gold)!important; 
+    letter-spacing: 7px!important; text-transform: uppercase!important; opacity: 0.8;
+}
 
-.ia_text_area { padding: 0 70px 40px; color: var(--text-silver) !important; font: 400 14px/190% 'Montserrat', sans-serif !important; text-align: justify !important; position: relative; z-index: 5; }
+/* GRADE DE DADOS DO INVENTOR */
+.ia-content { padding: 60px!important; position: relative!important; z-index: 2!important; }
 
-#ia_inventor b { color: var(--gold-glow) !important; font-weight: 600 !important; text-shadow: 0 0 8px rgba(224, 172, 105, 0.4); }
-#ia_inventor i { color: rgba(206, 206, 206, 0.7) !important; font-style: italic !important; font-weight: 300 !important; }
-#ia_inventor d { color: #e0ac69 !important; font-weight: 600 !important; font-family: 'Share Tech Mono', monospace !important; letter-spacing: 0.5px; opacity: 0.9; }
+.ia-data-grid { display: grid!important; grid-template-columns: 1fr 1fr 1fr!important; gap: 15px!important; margin-bottom: 40px!important; }
+.ia-data-item { 
+    background: rgba(255,255,255,0.02)!important; border: 1px solid rgba(255,255,255,0.05)!important;
+    padding: 15px!important; display: flex; flex-direction: column; position: relative; transition: 0.3s;
+}
+.ia-data-item:hover { border-color: var(--gold)!important; background: rgba(198, 166, 100, 0.03)!important; }
+.ia-data-item i { position: absolute; top: 10px; right: 10px; color: #333; font-size: 10pt; animation: iaSpin 10s linear infinite; }
+.ia-data-item:hover i { color: var(--gold)!important; text-shadow: 0 0 5px var(--gold); }
+.ia-data-item b { font: 700 8pt 'Rajdhani'!important; text-transform: uppercase!important; color: #666!important; letter-spacing: 2px!important; }
+.ia-data-item span { font: 400 11pt 'Source Code Pro'!important; color: var(--gold)!important; font-weight: 700; text-shadow: 0 0 5px var(--gold); }
 
-.ia_medallion_box { padding: 20px 0 30px; display: flex; justify-content: center; position: relative; }
-.ia_frame { width: 130px; height: 130px; border-radius: 50%; border: 4px solid var(--gold); padding: 5px; background: #111; box-shadow: 0 0 25px rgba(198, 166, 100, 0.3); margin: 0 auto; }
-.ia_img { width: 100%; height: 100%; border-radius: 50%; background-size: cover; background-position: center; border: 1px solid var(--silver); filter: grayscale(1) brightness(0.8); transition: filter 0.5s ease; }
-.ia_frame:hover .ia_img { filter: grayscale(0) brightness(1); }
+/* ÁREA NARRATIVA */
+.ia-bio { 
+    color: #cecece!important; font: 400 10.5pt 'Source Code Pro', monospace!important;
+    line-height: 1.9!important; text-align: justify!important; 
+    border-top: 1px solid rgba(255,255,255,0.05)!important; padding-top: 30px!important;
+}
 
-/* ASSINATURA REINSTALADA */
-.ia_sig_final { text-align: right; padding: 0 20px; }
-.ia_sig_final a { font: 700 8px 'Share Tech Mono', monospace !important; color: var(--gold) !important; text-decoration: none !important; text-transform: uppercase; letter-spacing: 3px; opacity: 0.25; transition: 0.3s; }
-.ia_sig_final a:hover { opacity: 0.8; text-shadow: 0 0 5px var(--gold-glow); }
+/* TAGS NARRATIVAS */
+#ia-inventor b { color: var(--gold-alt)!important; font-weight: 700!important; text-shadow: 0 0 5px rgba(224, 172, 105, 0.2); }
+#ia-inventor i { color: var(--silver)!important; font-style: italic!important; }
+#ia-inventor d { color: var(--gold)!important; font-weight: 600!important; font-family: 'Rajdhani'!important; letter-spacing: 1px; }
+
+/* MEDALHÃO PORTRAIT */
+.ia-portrait-box { margin-top: 40px; display: flex; justify-content: center; }
+.ia-medallion { 
+    width: 120px; height: 120px; border-radius: 50%; border: 2px solid var(--gold);
+    padding: 5px; background: #111; box-shadow: 0 0 20px rgba(198, 166, 100, 0.2);
+}
+.ia-medallion div { width: 100%; height: 100%; border-radius: 50%; background-size: cover; background-position: center; border: 1px solid var(--silver); }
+
+/* RODAPÉ E ASSINATURA */
+.ia-footer { 
+    text-align: center!important; padding: 30px 60px 10px!important; 
+    color: #444!important; font: 700 8pt 'Rajdhani'!important; text-transform: uppercase!important; letter-spacing: 3px;
+}
+.ia-footer i { color: var(--gold)!important; margin: 0 10px!important; animation: iaFlicker 2s infinite; }
+
+.ia-sig { font-size: 7pt!important; text-align: right!important; opacity: 0.3!important; text-transform: uppercase!important; letter-spacing: 2px!important; padding: 0 60px 30px; }
+.ia-sig a { color: var(--gold)!important; text-decoration: none!important; font-weight: 700; }
+
+/* ANIMAÇÕES */
+@keyframes iaScan { 0% { top: -100%; } 100% { top: 100%; } }
+@keyframes iaSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes iaFlicker { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+@keyframes iaGlitch {
+    0%, 100% { text-shadow: 2px 0 var(--gold-alt), -2px 0 var(--silver); }
+    2% { text-shadow: 5px 0 var(--gold-alt), -5px 0 var(--silver); transform: skewX(5deg); }
+    4% { text-shadow: -5px 0 var(--gold-alt), 5px 0 var(--silver); transform: skewX(-5deg); }
+}
