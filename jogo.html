@@ -2,142 +2,139 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Grand Design: Sistema de Extração v25.0</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Source+Code+Pro:wght@400;700&family=Rajdhani:wght@600&display=swap" rel="stylesheet">
+    <title>Memory System v26.0</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Source+Code+Pro:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root { --gold: #c6a664; --ruby: #8b0000; --silver: #a8a9ad; --bg: #050505; }
-        body { background: var(--bg) url('https://i.pinimg.com/originals/15/d0/ea/15d0ea79be5fe0a5e6d91b62a08ff3b9.gif') fixed center/cover; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; margin: 0; font-family: 'Source Code Pro', monospace; color: white; padding: 40px 0; }
-        body::before { content: ""; position: absolute; inset: 0; background: rgba(5,5,5,0.92); z-index: 1; pointer-events: none; }
+        body { background: var(--bg); display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; margin: 0; font-family: 'Source Code Pro', monospace; color: white; padding: 40px 0; }
         
-        .main-frame { position: relative; z-index: 10; width: 680px; padding: 30px; background: rgba(10, 10, 10, 0.96); border: 2px solid var(--gold); box-shadow: 0 0 50px #000; text-align: center; }
+        .main-frame { position: relative; z-index: 10; width: 680px; padding: 30px; background: #0a0a0a; border: 2px solid var(--gold); box-shadow: 0 0 50px #000; text-align: center; }
         
-        .gear { position: absolute; width: 100px; height: 100px; z-index: 20; opacity: 0.9; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23c6a664'%3E%3Cpath d='M12 15.5A3.5 3.5 0 0 1 8.5 12 3.5 3.5 0 0 1 12 8.5a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5m7-4.13c.04-.45.04-.91 0-1.37l2.11-1.65a.5.5 0 0 0 .12-.64l-2-3.46a.5.5 0 0 0-.61-.22l-2.49 1a8.5 8.5 0 0 0-1.18-.69l-.38-2.65a.5.5 0 0 0-.5-.42h-4a.5.5 0 0 0-.5.42l-.38 2.65c-.43.17-.81.4-1.18.69l-2.49-1a.5.5 0 0 0-.61.22l-2 3.46a.5.5 0 0 0 .12.64l2.11 1.65c-.04.46-.04.92 0 1.38l-2.11 1.65a.5.5 0 0 0-.12.64l2 3.46a.5.5 0 0 0 .61.22l2.49-1c.37.29.75.52 1.18.69l.38 2.65a.5.5 0 0 0 .5.42h4a.5.5 0 0 0 .5-.42l.38-2.65c.43-.17.81-.4 1.18-.69l2.49 1a.5.5 0 0 0 .61-.22l2-3.46a.5.5 0 0 0-.12-.64l-2.11-1.65z'/%3E%3C/svg%3E"); animation: spin 15s linear infinite; filter: drop-shadow(0 0 10px var(--gold)); }
-        .g-tl { top: -40px; left: -40px; } .g-br { bottom: -40px; right: -40px; animation-direction: reverse; }
-        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        
-        h1 { font-family: 'Cinzel'; font-size: 38px; color: #fff; letter-spacing: 5px; margin: 10px 0; text-shadow: 2px 0 var(--ruby); }
+        h1 { font-family: 'Cinzel'; font-size: 32px; color: #fff; letter-spacing: 5px; margin: 10px 0; text-shadow: 2px 0 var(--ruby); }
         .screen { display: none; flex-direction: column; align-items: center; }
-        .active { display: flex; }
+        .active { display: flex !important; }
         
         input { background: #111; border: 1px solid var(--gold); color: #fff; padding: 15px; width: 320px; font-family: 'Source Code Pro'; font-size: 16px; text-align: center; margin: 20px 0; outline: none; }
-        .btn { background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 12px 30px; font-family: 'Cinzel'; cursor: pointer; transition: 0.3s; letter-spacing: 2px; text-transform: uppercase; }
-        .btn:hover { background: var(--gold); color: #000; box-shadow: 0 0 15px var(--gold); }
+        .btn { background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 12px 30px; font-family: 'Cinzel'; cursor: pointer; transition: 0.3s; letter-spacing: 2px; }
+        .btn:hover { background: var(--gold); color: #000; }
         
-        .memory-game { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; width: 100%; margin: 20px 0; }
-        .card { height: 75px; position: relative; cursor: pointer; transform-style: preserve-3d; transition: transform 0.5s; }
+        /* Grid das 40 cartas */
+        .memory-game { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; width: 100%; margin: 20px 0; min-height: 300px; }
+        .card { height: 75px; position: relative; cursor: pointer; transform-style: preserve-3d; transition: transform 0.4s; }
         .card.flip { transform: rotateY(180deg); }
         .front, .back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border: 1px solid var(--gold); display: flex; justify-content: center; align-items: center; font-size: 20px; border-radius: 3px; }
         .front { background: #000; color: var(--gold); transform: rotateY(180deg); }
-        .back { background: #1a1a1a; color: var(--ruby); }
+        .back { background: #1a1a1a; color: var(--ruby); font-weight: bold; }
         
-        .reward-registry { margin-top: 40px; padding: 25px; border: 1px dashed var(--gold); background: rgba(0,0,0,0.6); text-align: left; }
-        .registry-title { font-family: 'Cinzel'; font-size: 18px; color: var(--gold); border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 15px; }
-        .log-list { font-family: 'Rajdhani'; font-size: 17px; max-height: 400px; overflow-y: auto; }
-        .log-item { margin-bottom: 12px; border-left: 3px solid var(--ruby); padding-left: 12px; animation: slideIn 0.4s ease-out; line-height: 1.4; }
-        .log-item b { color: #fff; text-transform: uppercase; }
+        /* Log de Recompensas */
+        .reward-registry { margin-top: 30px; padding: 20px; border: 1px dashed var(--gold); background: rgba(255,255,255,0.05); text-align: left; }
+        .registry-title { font-family: 'Cinzel'; font-size: 16px; color: var(--gold); border-bottom: 1px solid #333; padding-bottom: 8px; margin-bottom: 12px; }
+        .log-list { font-family: 'Source Code Pro'; font-size: 14px; max-height: 300px; overflow-y: auto; }
+        .log-item { margin-bottom: 8px; border-left: 3px solid var(--ruby); padding-left: 10px; color: #cecece; }
+        .log-item b { color: #fff; }
     </style>
 </head>
 <body>
 
     <div class="main-frame">
-        <div class="gear g-tl"></div>
-        <div class="gear g-br"></div>
         <h1>Grand Design</h1>
 
         <div class="screen active" id="login-screen">
-            <p style="color: var(--silver)">INSIRA IDENTIFICAÇÃO DO OPERADOR:</p>
-            <input type="text" id="player-name" placeholder="Ex: Raphael Sant'Angelo" maxlength="35">
-            <button class="btn" onclick="iniciarFluxo()">Sincronizar</button>
+            <p id="status-msg" style="color: var(--silver)">IDENTIFICAÇÃO NECESSÁRIA:</p>
+            <input type="text" id="player-input" placeholder="Seu Nome Aqui..." maxlength="30">
+            <button class="btn" onclick="fluxoInicial()">Sincronizar</button>
         </div>
 
         <div class="screen" id="game-screen">
             <div class="memory-game" id="game-board"></div>
             <div class="reward-registry">
-                <div class="registry-title">REGISTRO DE EXTRAÇÃO TÁTICA</div>
-                <div class="log-list" id="log-list">
-                    <div id="wait-msg" style="opacity: 0.4">Aguardando formação do primeiro par...</div>
+                <div class="registry-title">REGISTRO DE EXTRAÇÃO</div>
+                <div class="log-list" id="reward-log">
+                    <div id="wait-msg">Aguardando pareamento de dados...</div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        let nomeGlobal = "";
-        let acertos = 0;
-        let parAtual = [];
+        let nomeUsuario = "";
+        let paresAchados = 0;
+        let selecionadas = [];
 
-        const recompensas = {
-            '⚙️': "Ticket de Legado sem ficha", '🔧': "Ticket de Reparo", '💎': "Ticket de Rubi", '⚡': "Ticket Elétrico",
-            '🔬': "Ticket Científico", '🔋': "Ticket de Bateria", '🛠️': "Ticket de Manutenção", '📜': "Ticket de Tática",
-            '🔭': "Ticket de Lente", '🗝️': "Ticket de Chave", '🧪': "Ticket Químico", '🏮': "Ticket de Lanterna",
-            '📦': "Ticket de Carga", '🧭': "Ticket de Bússola", '📡': "Ticket de Rádio", '🛰️': "Ticket Orbital",
-            '🧩': "Ticket de Enigma", '⚖️': "Ticket de Troca", '🏹': "Ticket de Disparo", '🛡️': "Ticket de Escudo"
+        // 20 Pares = 20 Prêmios
+        const tabelaPremios = {
+            'A': 'Ticket de Legado sem ficha', 'B': 'Núcleo de Vapor', 'C': 'Lâmina de Rubi', 'D': 'Bateria de Éter',
+            'E': 'Manuscrito Arcano', 'F': 'Válvula de Ouro', 'G': 'Esquema Tático', 'H': 'Engrenagem Mestra',
+            'I': 'Lente Térmica', 'J': 'Chave do Cofre', 'K': 'Frasco de Óleo', 'L': 'Lanterna Steampunk',
+            'M': 'Caixa de Suprimentos', 'N': 'Bússola de Prata', 'O': 'Antena de Alcance', 'P': 'Chip Arcaico',
+            'Q': 'Fragmento de Metal', 'R': 'Balança de Bronze', 'S': 'Arco Mecânico', 'T': 'Escudo Galvânico'
         };
 
-        const icons = Object.keys(recompensas);
-        let baralho = [...icons, ...icons];
+        function fluxoInicial() {
+            const val = document.getElementById('player-input').value.trim();
+            if (val === "") return alert("Operador, o sistema exige um nome!");
 
-        function iniciarFluxo() {
-            const nomeInput = document.getElementById('player-name').value.trim();
-            if (nomeInput === "") {
-                alert("Por favor, identifique-se.");
-                return;
-            }
+            nomeUsuario = val;
+            
+            // Troca de tela forçada
+            document.getElementById('login-screen').classList.remove('active');
+            document.getElementById('game-screen').classList.add('active');
 
-            nomeGlobal = nomeInput;
-            
-            // Troca de tela imediata
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('game-screen').style.display = 'flex';
-            
-            gerarCards();
+            prepararJogo();
         }
 
-        function gerarCards() {
+        function prepararJogo() {
             const board = document.getElementById('game-board');
-            baralho.sort(() => Math.random() - 0.5);
+            const icons = Object.keys(tabelaPremios);
+            let deck = [...icons, ...icons];
             
-            baralho.forEach(icon => {
+            // Embaralhar
+            deck.sort(() => Math.random() - 0.5);
+
+            board.innerHTML = ''; // Limpa antes de gerar
+            
+            deck.forEach(simbolo => {
                 const card = document.createElement('div');
-                card.classList.add('card');
-                card.dataset.icon = icon;
-                card.innerHTML = `<div class="front">${icon}</div><div class="back"></div>`;
-                card.onclick = virar;
+                card.className = 'card';
+                card.dataset.value = simbolo;
+                card.innerHTML = `
+                    <div class="front">${simbolo}</div>
+                    <div class="back">?</div>
+                `;
+                card.onclick = function() {
+                    if (selecionadas.length < 2 && !this.classList.contains('flip')) {
+                        this.classList.add('flip');
+                        selecionadas.push(this);
+                        if (selecionadas.length === 2) setTimeout(verificar, 600);
+                    }
+                };
                 board.appendChild(card);
             });
         }
 
-        function virar() {
-            if (parAtual.length < 2 && !this.classList.contains('flip')) {
-                this.classList.add('flip');
-                parAtual.push(this);
-                if (parAtual.length === 2) setTimeout(checar, 700);
-            }
-        }
-
-        function checar() {
-            const [c1, c2] = parAtual;
-            if (c1.dataset.icon === c2.dataset.icon) {
-                acertos++;
-                registrarTicket(c1.dataset.icon);
+        function verificar() {
+            const [card1, card2] = selecionadas;
+            if (card1.dataset.value === card2.dataset.value) {
+                paresAchados++;
+                gerarLog(card1.dataset.value);
             } else {
-                c1.classList.remove('flip');
-                c2.classList.remove('flip');
+                card1.classList.remove('flip');
+                card2.classList.remove('flip');
             }
-            parAtual = [];
+            selecionadas = [];
         }
 
-        function registrarTicket(icon) {
-            const lista = document.getElementById('log-list');
+        function gerarLog(simbolo) {
+            const log = document.getElementById('reward-log');
             const wait = document.getElementById('wait-msg');
             if (wait) wait.remove();
 
-            const premio = recompensas[icon];
-            const item = document.createElement('div');
-            item.classList.add('log-item');
-            item.innerHTML = `<b>${nomeGlobal}:</b> 1 ${premio}`;
+            const premio = tabelaPremios[simbolo];
+            const div = document.createElement('div');
+            div.className = 'log-item';
+            div.innerHTML = `<b>${nomeUsuario}:</b> 1 ${premio}`;
             
-            lista.prepend(item);
+            log.prepend(div);
         }
     </script>
 </body>
